@@ -7,6 +7,37 @@
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81',
+                        },
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'slide-up': 'slideUp 0.5s ease-out forwards',
+                        'spin-slow': 'spin 3s linear infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,101 +48,107 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        body { background-color: #f3f4f6; background-image: radial-gradient(at 40% 20%, rgba(99, 102, 241, 0.1) 0px, transparent 50%), radial-gradient(at 80% 0%, rgba(168, 85, 247, 0.1) 0px, transparent 50%), radial-gradient(at 0% 50%, rgba(236, 72, 153, 0.1) 0px, transparent 50%); }
         
         /* Glass Panel Effect */
         .glass-panel { 
-            background: rgba(255, 255, 255, 0.9); 
-            border-radius: 20px; 
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05); 
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            transition: transform 0.2s, box-shadow 0.2s;
+            background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px; 
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .glass-panel:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.12);
+            border-color: rgba(255, 255, 255, 0.6);
         }
-        
+
         /* Navbar Glass */
         .nav-glass {
             background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
         }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 10px; border: 2px solid transparent; background-clip: content-box; }
+        ::-webkit-scrollbar-thumb:hover { background: #a5b4fc; }
 
         /* Navigation Links */
         .nav-item { 
             position: relative;
-            color: #64748b; 
+            color: #6b7280; 
             font-weight: 600; 
             cursor: pointer; 
-            transition: color 0.3s;
-            padding: 0.5rem 1rem;
+            transition: all 0.3s;
+            padding: 0.6rem 1.2rem;
             border-radius: 99px;
         }
-        .nav-item:hover { color: #1e293b; background: #f1f5f9; }
-        .nav-item.active { color: #2563EB; background: #eff6ff; }
+        .nav-item:hover { color: #4f46e5; background: rgba(224, 231, 255, 0.5); }
+        .nav-item.active { color: #4f46e5; background: #e0e7ff; box-shadow: 0 2px 4px rgba(99, 102, 241, 0.1); }
 
         /* Dynamic Island Animations */
         #dynamic-island {
-            transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
-                        height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-                        transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-                        opacity 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
         .island-content {
-            animation: fadeIn 0.3s ease-out forwards;
+            animation: islandFadeIn 0.4s ease-out forwards;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+        @keyframes islandFadeIn {
+            from { opacity: 0; transform: scale(0.9) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
         .spinner-ring {
-            border: 2px solid rgba(255,255,255,0.3);
+            border: 3px solid rgba(255,255,255,0.2);
             border-left-color: #fff;
             border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            animation: spin 1s linear infinite;
+            width: 20px;
+            height: 20px;
+            animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Page Transitions */
+        .page-transition {
+            animation: fade-in 0.4s ease-out;
+        }
     </style>
 </head>
-<body class="text-slate-800 h-screen flex flex-col overflow-hidden bg-slate-50 selection:bg-blue-100 selection:text-blue-700">
+<body class="text-gray-800 h-screen flex flex-col overflow-hidden bg-gray-50 selection:bg-primary-100 selection:text-primary-700 font-sans">
 
     <!-- DYNAMIC ISLAND (Fixed Top Center) -->
     <div class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] flex justify-center pointer-events-none">
-        <div id="dynamic-island" class="bg-black text-white rounded-[35px] flex items-center justify-center shadow-2xl overflow-hidden h-0 w-0 opacity-0 origin-top pointer-events-auto">
+        <div id="dynamic-island" class="bg-black text-white rounded-[35px] flex items-center justify-center shadow-2xl shadow-black/20 overflow-hidden h-0 w-0 opacity-0 origin-top pointer-events-auto backdrop-blur-xl bg-opacity-80 border border-white/10">
             <!-- Content Injected via JS -->
         </div>
     </div>
 
     <!-- 1. TOP NAVBAR (Floating Glass) -->
-    <nav class="nav-glass h-20 flex-none z-30 px-6 lg:px-10 flex items-center justify-between">
+    <nav class="nav-glass h-20 flex-none z-30 px-6 lg:px-10 flex items-center justify-between my-4 mx-6 lg:mx-10 rounded-3xl">
         <div class="flex items-center gap-10">
             <!-- Logo Area -->
             <div class="flex items-center gap-3 group cursor-pointer">
-                <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200 group-hover:scale-105 transition-transform duration-300">
-                    <i class="fa-solid fa-chart-pie text-lg"></i>
+                <div class="w-11 h-11 bg-gradient-to-br from-primary-500 to-purple-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary-200 group-hover:scale-105 transition-transform duration-300 ring-4 ring-primary-50/50">
+                    <i class="fa-solid fa-chart-pie text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg tracking-tight text-slate-800 leading-tight">COD Monitor</h1>
-                    <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Finance Dashboard</p>
+                    <h1 class="font-bold text-xl tracking-tight text-gray-900 leading-tight group-hover:text-primary-600 transition-colors">COD Monitor</h1>
+                    <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-widest">Finance Dashboard</p>
                 </div>
             </div>
             
             <!-- Navigation Pills -->
-            <div class="hidden md:flex gap-2 bg-slate-100/50 p-1.5 rounded-full border border-slate-200/60">
+            <div class="hidden md:flex gap-2 bg-gray-100/50 p-1.5 rounded-full border border-gray-200/50 shadow-inner">
                 <a onclick="switchPage('dashboard')" id="nav-dashboard" class="nav-item active text-sm">Overview</a>
                 <a onclick="switchPage('activity')" id="nav-activity" class="nav-item text-sm">Upload History</a>
             </div>
@@ -120,70 +157,70 @@
         <!-- Right Side Actions -->
         <div class="flex items-center gap-4">
             <!-- Admin Badge -->
-            <div id="userInfo" class="hidden items-center gap-2 pr-4 border-r border-slate-200">
+            <div id="userInfo" class="hidden items-center gap-3 pr-5 border-r border-gray-200">
                 <div class="flex flex-col items-end">
-                    <span class="text-xs font-bold text-slate-700">Administrator</span>
-                    <span class="text-[10px] text-green-500 font-medium flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Active</span>
+                    <span class="text-sm font-bold text-gray-800">Administrator</span>
+                    <span class="text-[11px] text-green-500 font-medium flex items-center gap-1.5"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-sm shadow-green-200"></span> Active Session</span>
                 </div>
-                <div class="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600">
-                    <i class="fa-solid fa-user-shield"></i>
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-white shadow-sm flex items-center justify-center text-gray-600 ring-2 ring-gray-50">
+                    <i class="fa-solid fa-user-shield text-lg"></i>
                 </div>
             </div>
 
             <!-- Auth Buttons -->
-            <button id="btnLogin" class="text-sm font-semibold text-slate-600 hover:text-blue-600 transition px-4 py-2 rounded-full hover:bg-blue-50">
+            <button id="btnLogin" class="text-sm font-semibold text-gray-600 hover:text-primary-600 transition px-5 py-2.5 rounded-full hover:bg-primary-50 border border-transparent hover:border-primary-100">
                 Login Admin
             </button>
-            <button id="btnLogout" class="hidden text-sm font-semibold text-red-500 hover:text-red-700 transition px-4 py-2 rounded-full hover:bg-red-50">
+            <button id="btnLogout" class="hidden text-sm font-semibold text-red-500 hover:text-red-700 transition px-5 py-2.5 rounded-full hover:bg-red-50 border border-transparent hover:border-red-100">
                 <i class="fa-solid fa-power-off mr-2"></i>Logout
             </button>
         </div>
     </nav>
 
     <!-- MAIN CONTENT CONTAINER -->
-    <main class="flex-1 overflow-hidden relative">
+    <main class="flex-1 overflow-hidden relative rounded-t-[40px] bg-white/60 backdrop-blur-lg shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)] mx-2 mt-2 border-t border-white/50">
         
         <!-- === PAGE: DASHBOARD === -->
-        <div id="pageDashboard" class="h-full flex flex-col overflow-hidden">
+        <div id="pageDashboard" class="h-full flex flex-col overflow-hidden page-transition">
             
             <!-- Filters Bar -->
             <div class="px-6 lg:px-10 py-6 flex flex-col md:flex-row gap-4 items-center justify-between flex-none z-20">
-                <div class="flex flex-col md:flex-row gap-3 items-center w-full md:w-auto p-1.5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+                <div class="flex flex-col md:flex-row gap-3 items-center w-full md:w-auto p-2 bg-white/80 border border-gray-100 rounded-3xl shadow-sm backdrop-blur-sm">
                     <!-- Date Range -->
-                    <div class="flex items-center gap-2 px-3">
-                        <div class="flex items-center bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5">
-                            <span class="text-[10px] text-slate-400 font-bold uppercase mr-2">From</span>
-                            <input type="date" id="startDate" class="bg-transparent text-xs font-semibold text-slate-700 focus:outline-none">
+                    <div class="flex items-center gap-3 px-3">
+                        <div class="flex items-center bg-gray-50/80 border border-gray-200 rounded-xl px-3 py-2 transition-all focus-within:border-primary-300 focus-within:ring-2 focus-within:ring-primary-100">
+                            <span class="text-[10px] text-gray-400 font-bold uppercase mr-2">From</span>
+                            <input type="date" id="startDate" class="bg-transparent text-sm font-semibold text-gray-700 focus:outline-none">
                         </div>
-                        <span class="text-slate-300"><i class="fa-solid fa-arrow-right text-xs"></i></span>
-                        <div class="flex items-center bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5">
-                            <span class="text-[10px] text-slate-400 font-bold uppercase mr-2">To</span>
-                            <input type="date" id="endDate" class="bg-transparent text-xs font-semibold text-slate-700 focus:outline-none">
+                        <span class="text-gray-300"><i class="fa-solid fa-arrow-right-long text-sm"></i></span>
+                        <div class="flex items-center bg-gray-50/80 border border-gray-200 rounded-xl px-3 py-2 transition-all focus-within:border-primary-300 focus-within:ring-2 focus-within:ring-primary-100">
+                            <span class="text-[10px] text-gray-400 font-bold uppercase mr-2">To</span>
+                            <input type="date" id="endDate" class="bg-transparent text-sm font-semibold text-gray-700 focus:outline-none">
                         </div>
                     </div>
 
                     <!-- Separator -->
-                    <div class="hidden md:block w-px h-8 bg-slate-100"></div>
+                    <div class="hidden md:block w-px h-8 bg-gray-200"></div>
 
                     <!-- Staging Filter -->
-                    <div class="relative min-w-[180px]">
-                        <select id="stagingFilter" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 font-medium py-2 pl-3 pr-8 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-100 transition cursor-pointer">
+                    <div class="relative min-w-[200px]">
+                        <select id="stagingFilter" class="w-full appearance-none bg-gray-50/80 border border-gray-200 text-gray-700 font-medium py-2.5 pl-4 pr-10 rounded-xl text-sm focus:outline-none focus:border-primary-300 focus:ring-2 focus:ring-primary-100 transition cursor-pointer hover:bg-gray-100">
                             <option value="ALL">All Staging Areas</option>
                         </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
-                            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
                         </div>
                     </div>
 
-                    <button onclick="loadDashboardData()" class="bg-slate-900 hover:bg-black text-white px-5 py-2 rounded-xl text-xs font-bold transition shadow-lg shadow-slate-200">
+                    <button onclick="loadDashboardData()" class="bg-gray-900 hover:bg-black text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg shadow-gray-200 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-md ml-2">
                         Apply Filter
                     </button>
                 </div>
                 
                 <!-- Search Table -->
-                 <div class="w-full md:w-72 relative group">
-                    <i class="fa-solid fa-search absolute left-4 top-3 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
-                    <input type="text" id="searchTable" placeholder="Search AWB, Courier, Name..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-50/50 focus:border-blue-300 transition-all shadow-sm">
+                 <div class="w-full md:w-80 relative group">
+                    <i class="fa-solid fa-search absolute left-4 top-3.5 text-gray-400 group-focus-within:text-primary-500 transition-colors text-sm"></i>
+                    <input type="text" id="searchTable" placeholder="Search AWB, Courier, Name..." class="w-full pl-11 pr-4 py-3 bg-white/80 border border-gray-200 rounded-3xl text-sm font-medium focus:outline-none focus:ring-4 focus:ring-primary-50/50 focus:border-primary-300 transition-all shadow-sm hover:border-gray-300">
                 </div>
             </div>
 
@@ -191,84 +228,127 @@
             <div class="flex-1 overflow-y-auto px-6 lg:px-10 pb-10">
                 <div class="max-w-[1600px] mx-auto space-y-8">
                     
-                    <!-- 1. Stats Cards -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- NEW: TOP KPI CARDS (Moved Here) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 animate-slide-up">
+                        <!-- Total AWB -->
+                        <div class="glass-panel p-6 flex items-center justify-between border-l-[6px] border-l-purple-500 group hover:bg-white/80">
+                            <div>
+                                <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2 group-hover:text-purple-500 transition-colors">Total AWB</p>
+                                <h3 class="text-5xl font-black text-gray-800 tracking-tight leading-none" id="valTotalAWB">0</h3>
+                            </div>
+                            <div class="w-20 h-20 rounded-3xl bg-purple-50 flex items-center justify-center text-purple-500 shadow-md shadow-purple-100 group-hover:scale-110 transition-transform duration-300">
+                                <i class="fa-solid fa-box-open text-3xl"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Total Amount -->
+                        <div class="glass-panel p-6 flex items-center justify-between border-l-[6px] border-l-indigo-600 group hover:bg-white/80">
+                            <div>
+                                <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2 group-hover:text-indigo-600 transition-colors">Total Amount All</p>
+                                <h3 class="text-5xl font-black text-gray-800 tracking-tight leading-none" id="valTotalAmount">Rp. 0</h3>
+                            </div>
+                            <div class="w-20 h-20 rounded-3xl bg-indigo-50 flex items-center justify-center text-indigo-600 shadow-md shadow-indigo-100 group-hover:scale-110 transition-transform duration-300">
+                                <i class="fa-solid fa-sack-dollar text-3xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NEW: TREND LINE CHART (Moved Here) -->
+                    <div class="glass-panel p-6 animate-slide-up" style="animation-delay: 0.05s;">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                                <span class="bg-primary-100 text-primary-600 p-1.5 rounded-lg"><i class="fa-solid fa-chart-line"></i></span> Revenue Trend
+                            </h3>
+                            
+                            <!-- Toggle Switch Daily/Monthly -->
+                            <div class="flex items-center bg-gray-100 p-1 rounded-xl">
+                                <button id="btnTrendDaily" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-primary-600 shadow-sm" onclick="setTrendMode('daily')">Daily</button>
+                                <button id="btnTrendMonthly" class="px-4 py-1.5 rounded-lg text-xs font-bold text-gray-500 hover:text-gray-700 transition-all" onclick="setTrendMode('monthly')">Monthly</button>
+                            </div>
+                        </div>
+                        <div class="w-full h-[300px]">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 1. Stats Breakdown Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-slide-up" style="animation-delay: 0.1s;">
                         <!-- Satria -->
-                        <div class="glass-panel p-6 relative overflow-hidden group">
-                            <div class="absolute -right-6 -top-6 w-24 h-24 bg-blue-50 rounded-full group-hover:scale-150 transition-transform duration-500 ease-out"></div>
+                        <div class="glass-panel p-6 relative overflow-hidden group border-t-4 border-t-blue-400">
+                            <div class="absolute -right-10 -top-10 w-32 h-32 bg-gradient-to-br from-blue-50 to-blue-100 rounded-full group-hover:scale-150 transition-transform duration-700 ease-out opacity-50"></div>
                             <div class="relative">
-                                <div class="flex justify-between items-start mb-2">
-                                    <div class="bg-blue-100/50 p-2 rounded-lg text-blue-600 mb-3 inline-block">
-                                        <i class="fa-solid fa-wallet text-lg"></i>
+                                <div class="flex justify-between items-start mb-3">
+                                    <div class="bg-blue-100/80 p-3 rounded-2xl text-blue-600 mb-3 inline-block shadow-sm shadow-blue-100 group-hover:rotate-6 transition-transform">
+                                        <i class="fa-solid fa-wallet text-xl"></i>
                                     </div>
-                                    <span class="text-xs font-bold px-2 py-1 bg-blue-50 text-blue-600 rounded-full">IN</span>
+                                    <span class="text-xs font-bold px-3 py-1.5 bg-blue-50 text-blue-600 rounded-full border border-blue-100">IN</span>
                                 </div>
-                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Cash In Satria</p>
-                                <h3 class="text-3xl font-bold text-slate-800 tracking-tight" id="valSatria">Rp. 0</h3>
+                                <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Cash In Satria</p>
+                                <h3 class="text-3xl font-black text-gray-800 tracking-tight" id="valSatria">Rp. 0</h3>
                             </div>
                         </div>
 
                         <!-- Transferred -->
-                        <div class="glass-panel p-6 relative overflow-hidden group">
-                            <div class="absolute -right-6 -top-6 w-24 h-24 bg-emerald-50 rounded-full group-hover:scale-150 transition-transform duration-500 ease-out"></div>
+                        <div class="glass-panel p-6 relative overflow-hidden group border-t-4 border-t-emerald-400">
+                            <div class="absolute -right-10 -top-10 w-32 h-32 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-full group-hover:scale-150 transition-transform duration-700 ease-out opacity-50"></div>
                             <div class="relative">
-                                <div class="flex justify-between items-start mb-2">
-                                    <div class="bg-emerald-100/50 p-2 rounded-lg text-emerald-600 mb-3 inline-block">
-                                        <i class="fa-solid fa-check-circle text-lg"></i>
+                                <div class="flex justify-between items-start mb-3">
+                                    <div class="bg-emerald-100/80 p-3 rounded-2xl text-emerald-600 mb-3 inline-block shadow-sm shadow-emerald-100 group-hover:rotate-6 transition-transform">
+                                        <i class="fa-solid fa-circle-check text-xl"></i>
                                     </div>
-                                    <span class="text-xs font-bold px-2 py-1 bg-emerald-50 text-emerald-600 rounded-full">DONE</span>
+                                    <span class="text-xs font-bold px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-full border border-emerald-100">DONE</span>
                                 </div>
-                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Cash Transferred</p>
-                                <h3 class="text-3xl font-bold text-slate-800 tracking-tight" id="valTransferred">Rp. 0</h3>
+                                <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Cash Transferred</p>
+                                <h3 class="text-3xl font-black text-gray-800 tracking-tight" id="valTransferred">Rp. 0</h3>
                             </div>
                         </div>
 
                         <!-- Pending -->
-                        <div class="glass-panel p-6 relative overflow-hidden group">
-                            <div class="absolute -right-6 -top-6 w-24 h-24 bg-orange-50 rounded-full group-hover:scale-150 transition-transform duration-500 ease-out"></div>
+                        <div class="glass-panel p-6 relative overflow-hidden group border-t-4 border-t-orange-400">
+                            <div class="absolute -right-10 -top-10 w-32 h-32 bg-gradient-to-br from-orange-50 to-orange-100 rounded-full group-hover:scale-150 transition-transform duration-700 ease-out opacity-50"></div>
                             <div class="relative">
-                                <div class="flex justify-between items-start mb-2">
-                                    <div class="bg-orange-100/50 p-2 rounded-lg text-orange-600 mb-3 inline-block">
-                                        <i class="fa-solid fa-clock text-lg"></i>
+                                <div class="flex justify-between items-start mb-3">
+                                    <div class="bg-orange-100/80 p-3 rounded-2xl text-orange-600 mb-3 inline-block shadow-sm shadow-orange-100 group-hover:rotate-6 transition-transform">
+                                        <i class="fa-solid fa-clock text-xl"></i>
                                     </div>
-                                    <span class="text-xs font-bold px-2 py-1 bg-orange-50 text-orange-600 rounded-full">WAIT</span>
+                                    <span class="text-xs font-bold px-3 py-1.5 bg-orange-50 text-orange-600 rounded-full border border-orange-100">WAIT</span>
                                 </div>
-                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">To Be Transferred</p>
-                                <h3 class="text-3xl font-bold text-slate-800 tracking-tight" id="valPending">Rp. 0</h3>
+                                <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">To Be Transferred</p>
+                                <h3 class="text-3xl font-black text-gray-800 tracking-tight" id="valPending">Rp. 0</h3>
                             </div>
                         </div>
                     </div>
 
                     <!-- 2. Charts Section -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-slide-up" style="animation-delay: 0.2s;">
                         <!-- Donut Chart & Table -->
                         <div class="glass-panel p-6 flex flex-col">
-                            <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-chart-pie text-slate-400"></i> Cash Flow Composition
+                            <h3 class="font-bold text-gray-800 mb-6 text-base flex items-center gap-2">
+                                <span class="bg-primary-100 text-primary-600 p-1.5 rounded-lg"><i class="fa-solid fa-chart-pie"></i></span> Cash Flow Composition
                             </h3>
-                            <div class="flex flex-col xl:flex-row items-center gap-6 flex-1 h-full justify-center">
+                            <div class="flex flex-col items-center gap-8 flex-1 h-full justify-start">
                                 <!-- Donut -->
-                                <div class="relative w-full xl:w-1/2 h-56">
+                                <div class="relative w-full h-64 flex justify-center">
                                     <canvas id="donutChart"></canvas>
                                 </div>
                                 <!-- Table -->
-                                <div id="donutLegendTable" class="w-full xl:w-1/2">
+                                <div id="donutLegendTable" class="w-full mt-auto">
                                     <!-- Table injected via JS -->
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Staging Chart -->
+                        <!-- Staging Chart (Horizontal) -->
                         <div class="glass-panel p-6 lg:col-span-2 flex flex-col">
                              <div class="flex justify-between items-center mb-6">
-                                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-chart-simple text-slate-400"></i> COD Volume by Staging (Highest to Lowest)
+                                <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                                    <span class="bg-primary-100 text-primary-600 p-1.5 rounded-lg"><i class="fa-solid fa-chart-bar"></i></span> COD Volume by Staging (Highest to Lowest)
                                 </h3>
-                                <button class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-ellipsis"></i></button>
+                                <button class="text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 p-2 rounded-full transition-colors"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                              </div>
                              <!-- Scrollable Container for Chart -->
-                             <div class="flex-1 w-full min-h-[300px] overflow-x-auto custom-scroll pb-2">
-                                <div id="stagingChartWrapper" class="h-full min-w-full">
+                             <div class="flex-1 w-full min-h-[400px] overflow-y-auto custom-scroll pb-4 pr-2">
+                                <div id="stagingChartWrapper" class="w-full">
                                     <canvas id="stagingChart"></canvas>
                                 </div>
                             </div>
@@ -276,58 +356,58 @@
                     </div>
 
                     <!-- 3. Top Couriers & Data Table -->
-                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 animate-slide-up" style="animation-delay: 0.3s;">
                         
                         <!-- Top 10 Kurir -->
-                        <div class="glass-panel p-0 overflow-hidden lg:col-span-1 flex flex-col h-[600px]">
-                            <div class="p-5 border-b border-slate-100 bg-slate-50/50 backdrop-blur-sm">
-                                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                    <span class="text-yellow-500">🏆</span> Top 10 Couriers
+                        <div class="glass-panel p-0 overflow-hidden lg:col-span-1 flex flex-col h-[650px]">
+                            <div class="p-6 border-b border-gray-100 bg-gray-50/50 backdrop-blur-sm">
+                                <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                                    <span class="text-2xl">🏆</span> Top 10 Couriers
                                 </h3>
                             </div>
-                            <div class="overflow-y-auto flex-1 p-3 space-y-2 custom-scroll" id="topCouriersList">
+                            <div class="overflow-y-auto flex-1 p-4 space-y-3 custom-scroll" id="topCouriersList">
                                 <!-- List populated via JS -->
                             </div>
                         </div>
 
                         <!-- Main Table -->
-                        <div class="glass-panel p-0 overflow-hidden lg:col-span-3 flex flex-col h-[600px]">
-                            <div class="px-6 py-4 border-b border-slate-100 bg-white flex justify-between items-center z-10">
-                                <h3 class="font-bold text-slate-800 text-sm">Detailed Transactions</h3>
-                                <button onclick="exportTableToCSV()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg font-bold transition flex items-center gap-2">
-                                    <i class="fa-solid fa-file-csv text-green-600"></i> Export CSV
+                        <div class="glass-panel p-0 overflow-hidden lg:col-span-3 flex flex-col h-[650px]">
+                            <div class="px-6 py-5 border-b border-gray-100 bg-white/50 flex justify-between items-center z-10 backdrop-blur-sm">
+                                <h3 class="font-bold text-gray-800 text-base flex items-center gap-2"><span class="bg-primary-100 text-primary-600 p-1.5 rounded-lg"><i class="fa-solid fa-list-ul"></i></span> Detailed Transactions</h3>
+                                <button onclick="exportTableToCSV()" class="text-xs bg-white hover:bg-gray-50 text-gray-700 px-4 py-2.5 rounded-xl font-bold transition flex items-center gap-2 border border-gray-200 shadow-sm hover:shadow-md">
+                                    <i class="fa-solid fa-file-csv text-green-600 text-base"></i> Export CSV
                                 </button>
                             </div>
-                            <div class="overflow-auto flex-1 bg-white">
-                                <table class="w-full text-sm text-left relative">
-                                    <thead class="text-xs text-slate-500 font-bold uppercase bg-slate-50 sticky top-0 z-10 shadow-sm">
+                            <div class="overflow-auto flex-1 bg-white/40 backdrop-blur-sm">
+                                <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-2">
+                                    <thead class="text-xs text-gray-500 font-bold uppercase bg-gray-50/80 sticky top-0 z-10 shadow-sm backdrop-blur-md">
                                         <tr>
-                                            <th class="px-6 py-4 tracking-wider">AWB</th>
+                                            <th class="px-6 py-4 tracking-wider first:rounded-l-xl last:rounded-r-xl">AWB</th>
                                             <th class="px-6 py-4 tracking-wider">Courier / Shipper</th>
                                             <th class="px-6 py-4 tracking-wider">Staging</th>
                                             <th class="px-6 py-4 tracking-wider">Category</th>
-                                            <th class="px-6 py-4 tracking-wider text-right">Amount</th>
+                                            <th class="px-6 py-4 tracking-wider text-right first:rounded-l-xl last:rounded-r-xl">Amount</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tableBody" class="divide-y divide-slate-100">
+                                    <tbody id="tableBody" class="divide-y divide-transparent">
                                         <tr>
-                                            <td colspan="5" class="px-6 py-12 text-center text-slate-400 flex flex-col items-center">
-                                                <i class="fa-solid fa-circle-notch fa-spin text-2xl mb-2 text-blue-500"></i>
-                                                <span>Loading financial data...</span>
+                                            <td colspan="5" class="px-6 py-20 text-center text-gray-400 flex flex-col items-center justify-center bg-white/30 rounded-xl m-2">
+                                                <i class="fa-solid fa-circle-notch fa-spin text-4xl mb-4 text-primary-400"></i>
+                                                <span class="font-medium">Loading financial data...</span>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <!-- Pagination Controls -->
-                             <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 text-xs font-medium text-slate-500 flex justify-between items-center">
-                                <span id="showingText">Showing 0 entries</span>
-                                <div class="flex items-center gap-2">
-                                    <button id="btnPrevPage" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center gap-1">
+                             <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50 text-xs font-medium text-gray-500 flex justify-between items-center backdrop-blur-sm">
+                                <span id="showingText" class="font-semibold">Showing 0 entries</span>
+                                <div class="flex items-center gap-3">
+                                    <button id="btnPrevPage" class="px-4 py-2 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2 font-bold shadow-sm hover:shadow-md disabled:shadow-none">
                                         <i class="fa-solid fa-chevron-left"></i> Prev
                                     </button>
-                                    <span id="pageInfo" class="text-slate-700 font-bold bg-slate-200 px-3 py-1.5 rounded-lg">1</span>
-                                    <button id="btnNextPage" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center gap-1">
+                                    <span id="pageInfo" class="text-gray-700 font-bold bg-gray-200/70 px-4 py-2 rounded-xl">1</span>
+                                    <button id="btnNextPage" class="px-4 py-2 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2 font-bold shadow-sm hover:shadow-md disabled:shadow-none">
                                         Next <i class="fa-solid fa-chevron-right"></i>
                                     </button>
                                 </div>
@@ -340,32 +420,31 @@
         </div>
 
         <!-- === PAGE: ACTIVITY (UPLOAD) === -->
-        <div id="pageActivity" class="h-full flex flex-col overflow-hidden hidden bg-white/50">
+        <div id="pageActivity" class="h-full flex flex-col overflow-hidden hidden bg-white/30 backdrop-blur-lg page-transition">
             <div class="flex-1 overflow-y-auto p-6 lg:p-10">
-                <div class="max-w-5xl mx-auto">
-                    <!-- ... existing content ... -->
-                    <div class="flex justify-between items-end mb-8">
+                <div class="max-w-6xl mx-auto space-y-8">
+                    <div class="flex justify-between items-end mb-8 animate-slide-up">
                         <div>
-                            <h2 class="text-3xl font-bold text-slate-800">Data Management</h2>
-                            <p class="text-slate-500 mt-1">Manage your uploaded CSV files history.</p>
+                            <h2 class="text-4xl font-black text-gray-800 tracking-tight">Data Management</h2>
+                            <p class="text-gray-500 mt-2 text-lg">Manage your uploaded CSV files history.</p>
                         </div>
-                        <button id="btnOpenUpload" class="hidden bg-slate-900 hover:bg-black text-white px-6 py-3 rounded-2xl text-sm font-bold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all flex items-center gap-3">
-                            <i class="fa-solid fa-cloud-arrow-up"></i> Upload New Data
+                        <button id="btnOpenUpload" class="hidden bg-gray-900 hover:bg-black text-white px-8 py-4 rounded-2xl text-sm font-bold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all flex items-center gap-3">
+                            <i class="fa-solid fa-cloud-arrow-up text-xl"></i> Upload New Data
                         </button>
                     </div>
 
-                    <div class="glass-panel overflow-hidden">
-                        <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-slate-500 font-bold uppercase bg-slate-50 border-b border-slate-200">
+                    <div class="glass-panel overflow-hidden animate-slide-up" style="animation-delay: 0.1s;">
+                        <table class="w-full text-sm text-left border-separate border-spacing-y-2 px-4 py-2">
+                            <thead class="text-xs text-gray-500 font-bold uppercase bg-gray-100/50 border-b border-gray-200">
                                 <tr>
-                                    <th class="px-6 py-4">Data Date</th>
-                                    <th class="px-6 py-4">Filename</th>
-                                    <th class="px-6 py-4">Category</th>
-                                    <th class="px-6 py-4">Uploaded At</th>
-                                    <th class="px-6 py-4 text-right">Actions</th>
+                                    <th class="px-6 py-5 first:rounded-l-2xl last:rounded-r-2xl">Data Date</th>
+                                    <th class="px-6 py-5">Filename</th>
+                                    <th class="px-6 py-5">Category</th>
+                                    <th class="px-6 py-5">Uploaded At</th>
+                                    <th class="px-6 py-5 text-right first:rounded-l-2xl last:rounded-r-2xl">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="activityTableBody" class="divide-y divide-slate-100">
+                            <tbody id="activityTableBody" class="divide-y divide-transparent">
                                 <!-- Populated by JS -->
                             </tbody>
                         </table>
@@ -376,52 +455,55 @@
 
     </main>
 
-    <!-- MODALS (Upload, Edit, Delete, Login) - Same as previous, kept for completeness -->
-    <div id="uploadModal" class="fixed inset-0 bg-slate-900/40 z-[90] hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-[2rem] w-full max-w-md p-8 shadow-2xl transform scale-100 transition-all border border-white/50">
-            <div class="flex justify-between items-center mb-6">
+    <!-- MODALS (Upload, Edit, Delete, Login) -->
+    <div id="uploadModal" class="fixed inset-0 bg-gray-900/40 z-[90] hidden flex items-center justify-center p-4 backdrop-blur-md transition-opacity duration-300">
+        <div class="glass-panel rounded-[3rem] w-full max-w-lg p-10 shadow-2xl transform scale-100 transition-all border border-white/50 bg-white/90">
+            <div class="flex justify-between items-center mb-8">
                 <div>
-                    <h3 class="text-xl font-bold text-slate-900">Upload CSV</h3>
-                    <p class="text-xs text-slate-400 mt-1">Make sure format matches standard.</p>
+                    <h3 class="text-2xl font-black text-gray-900">Upload CSV</h3>
+                    <p class="text-sm text-gray-500 mt-2 font-medium">Make sure format matches standard.</p>
                 </div>
-                <button id="btnCloseUpload" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark"></i></button>
+                <button id="btnCloseUpload" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-200 transition-all hover:rotate-90"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             
-            <form id="uploadForm" class="space-y-5">
+            <form id="uploadForm" class="space-y-6">
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Data Date</label>
-                    <input type="date" id="uploadDate" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition">
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Data Date</label>
+                    <input type="date" id="uploadDate" required class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-semibold focus:ring-4 focus:ring-primary-100 focus:border-primary-500 focus:bg-white outline-none transition-all">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Category</label>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Category</label>
                     <div class="grid grid-cols-1 gap-3">
-                        <label class="flex items-center p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-blue-50/50 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 has-[:checked]:ring-1 has-[:checked]:ring-blue-500 transition group">
-                            <input type="radio" name="category" value="satria" class="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500" required>
-                            <span class="ml-3 text-sm font-bold text-slate-600 group-has-[:checked]:text-blue-700">Cash In Satria</span>
+                        <label class="flex items-center p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:bg-blue-50/50 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/80 has-[:checked]:ring-4 has-[:checked]:ring-blue-100 transition-all group relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent opacity-0 group-has-[:checked]:opacity-100 transition-opacity"></div>
+                            <input type="radio" name="category" value="satria" class="w-5 h-5 text-blue-600 border-gray-300 focus:ring-blue-500 z-10" required>
+                            <span class="ml-4 text-sm font-bold text-gray-700 group-has-[:checked]:text-blue-800 z-10 flex items-center gap-2"><i class="fa-solid fa-wallet text-blue-500"></i> Cash In Satria</span>
                         </label>
-                        <label class="flex items-center p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-emerald-50/50 has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50 has-[:checked]:ring-1 has-[:checked]:ring-emerald-500 transition group">
-                            <input type="radio" name="category" value="transferred" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
-                            <span class="ml-3 text-sm font-bold text-slate-600 group-has-[:checked]:text-emerald-700">Cash Transferred</span>
+                        <label class="flex items-center p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:bg-emerald-50/50 has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/80 has-[:checked]:ring-4 has-[:checked]:ring-emerald-100 transition-all group relative overflow-hidden">
+                             <div class="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent opacity-0 group-has-[:checked]:opacity-100 transition-opacity"></div>
+                            <input type="radio" name="category" value="transferred" class="w-5 h-5 text-emerald-600 border-gray-300 focus:ring-emerald-500 z-10">
+                            <span class="ml-4 text-sm font-bold text-gray-700 group-has-[:checked]:text-emerald-800 z-10 flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> Cash Transferred</span>
                         </label>
-                        <label class="flex items-center p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-orange-50/50 has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50 has-[:checked]:ring-1 has-[:checked]:ring-orange-500 transition group">
-                            <input type="radio" name="category" value="pending" class="w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500">
-                            <span class="ml-3 text-sm font-bold text-slate-600 group-has-[:checked]:text-orange-700">To Be Transferred</span>
+                        <label class="flex items-center p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:bg-orange-50/50 has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50/80 has-[:checked]:ring-4 has-[:checked]:ring-orange-100 transition-all group relative overflow-hidden">
+                             <div class="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-transparent opacity-0 group-has-[:checked]:opacity-100 transition-opacity"></div>
+                            <input type="radio" name="category" value="pending" class="w-5 h-5 text-orange-600 border-gray-300 focus:ring-orange-500 z-10">
+                            <span class="ml-4 text-sm font-bold text-gray-700 group-has-[:checked]:text-orange-800 z-10 flex items-center gap-2"><i class="fa-solid fa-clock text-orange-500"></i> To Be Transferred</span>
                         </label>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">CSV File</label>
-                    <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 hover:border-slate-400 transition cursor-pointer relative group">
-                        <input type="file" id="csvFile" accept=".csv" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                        <div class="group-hover:scale-110 transition-transform duration-300 inline-block mb-3">
-                            <i class="fa-solid fa-file-csv text-4xl text-slate-300 group-hover:text-blue-500"></i>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">CSV File</label>
+                    <div class="border-3 border-dashed border-gray-300 rounded-3xl p-10 text-center hover:bg-gray-50/80 hover:border-primary-400 transition-all cursor-pointer relative group bg-gray-50/30">
+                        <input type="file" id="csvFile" accept=".csv" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
+                        <div class="group-hover:scale-110 transition-transform duration-300 inline-block mb-4 p-4 bg-white rounded-full shadow-md group-hover:shadow-lg group-hover:text-primary-600">
+                            <i class="fa-solid fa-cloud-arrow-up text-5xl text-gray-300 group-hover:text-primary-500 transition-colors"></i>
                         </div>
-                        <p class="text-sm text-slate-600 font-bold" id="fileNameDisplay">Click to browse file</p>
-                        <p class="text-xs text-slate-400 mt-1">Separator must be '|'</p>
+                        <p class="text-base text-gray-700 font-bold" id="fileNameDisplay">Click or drag to upload file</p>
+                        <p class="text-sm text-gray-400 mt-2 font-medium">Separator must be '|' (pipe)</p>
                     </div>
                 </div>
-                <div class="pt-2">
-                    <button type="submit" id="btnSubmitUpload" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3.5 rounded-xl transition shadow-lg transform active:scale-95 flex justify-center items-center gap-2">
+                <div class="pt-4">
+                    <button type="submit" id="btnSubmitUpload" class="w-full bg-gradient-to-r from-gray-900 to-black hover:from-primary-700 hover:to-primary-900 text-white font-bold py-4 rounded-2xl transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 transform active:scale-95 flex justify-center items-center gap-3 text-lg">
                         Upload Data
                     </button>
                 </div>
@@ -429,64 +511,65 @@
         </div>
     </div>
 
-    <div id="editModal" class="fixed inset-0 bg-slate-900/40 z-[90] hidden flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-[2rem] w-full max-w-sm p-8 shadow-2xl transform scale-100 transition-all">
-            <h3 class="text-xl font-bold text-slate-900 mb-6">Edit Category</h3>
-            <form id="editForm" class="space-y-4">
+    <div id="editModal" class="fixed inset-0 bg-gray-900/40 z-[90] hidden flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="glass-panel rounded-[3rem] w-full max-w-md p-10 shadow-2xl transform scale-100 transition-all bg-white/90">
+            <h3 class="text-2xl font-black text-gray-900 mb-8">Edit Category</h3>
+            <form id="editForm" class="space-y-5">
                 <input type="hidden" id="editDocId">
-                <div class="grid grid-cols-1 gap-2">
-                     <label class="flex items-center p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-blue-50 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 transition">
-                        <input type="radio" name="editCategory" value="satria" class="w-4 h-4 text-blue-600" required>
-                        <span class="ml-3 text-sm font-bold text-slate-700">Cash In Satria</span>
+                <div class="grid grid-cols-1 gap-3">
+                     <label class="flex items-center p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:bg-blue-50 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/80 has-[:checked]:ring-4 has-[:checked]:ring-blue-100 transition-all">
+                        <input type="radio" name="editCategory" value="satria" class="w-5 h-5 text-blue-600" required>
+                        <span class="ml-4 text-sm font-bold text-gray-700 flex items-center gap-2"><i class="fa-solid fa-wallet text-blue-500"></i> Cash In Satria</span>
                     </label>
-                    <label class="flex items-center p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50 transition">
-                        <input type="radio" name="editCategory" value="transferred" class="w-4 h-4 text-emerald-600">
-                        <span class="ml-3 text-sm font-bold text-slate-700">Cash Transferred</span>
+                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/80 has-[:checked]:ring-4 has-[:checked]:ring-emerald-100 transition-all">
+                        <input type="radio" name="editCategory" value="transferred" class="w-5 h-5 text-emerald-600">
+                        <span class="ml-4 text-sm font-bold text-gray-700 flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> Cash Transferred</span>
                     </label>
-                    <label class="flex items-center p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-orange-50 has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50 transition">
-                        <input type="radio" name="editCategory" value="pending" class="w-4 h-4 text-orange-600">
-                        <span class="ml-3 text-sm font-bold text-slate-700">To Be Transferred</span>
+                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:bg-orange-50 has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50/80 has-[:checked]:ring-4 has-[:checked]:ring-orange-100 transition-all">
+                        <input type="radio" name="editCategory" value="pending" class="w-5 h-5 text-orange-600">
+                        <span class="ml-4 text-sm font-bold text-gray-700 flex items-center gap-2"><i class="fa-solid fa-clock text-orange-500"></i> To Be Transferred</span>
                     </label>
                 </div>
-                <div class="flex gap-3 pt-4">
-                    <button type="button" id="btnCancelEdit" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition">Cancel</button>
-                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition shadow-lg">Save</button>
+                <div class="flex gap-4 pt-6">
+                    <button type="button" id="btnCancelEdit" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3.5 rounded-2xl transition-all">Cancel</button>
+                    <button type="submit" class="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-bold py-3.5 rounded-2xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">Save Changes</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="deleteModal" class="fixed inset-0 bg-slate-900/40 z-[90] hidden flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-[2rem] w-full max-w-sm p-8 shadow-2xl text-center border border-white/50">
-            <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                <i class="fa-solid fa-trash-can text-3xl text-red-500"></i>
+    <div id="deleteModal" class="fixed inset-0 bg-gray-900/40 z-[90] hidden flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="glass-panel rounded-[3rem] w-full max-w-md p-10 shadow-2xl text-center border border-white/50 bg-white/90">
+            <div class="w-24 h-24 bg-red-50 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-sm ring-8 ring-red-50/50 animate-bounce-slow">
+                <i class="fa-solid fa-trash-can text-4xl text-red-500"></i>
             </div>
-            <h3 class="text-xl font-bold text-slate-900 mb-2">Delete File?</h3>
-            <p class="text-sm text-slate-500 mb-8 leading-relaxed">This action cannot be undone. All transactions in this file will be removed.</p>
-            <div class="flex gap-3">
-                <button id="btnCancelDelete" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition">Cancel</button>
-                <button id="btnConfirmDelete" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl transition shadow-lg hover:shadow-red-200">
-                    Delete
+            <h3 class="text-2xl font-black text-gray-900 mb-3">Delete File?</h3>
+            <p class="text-base text-gray-500 mb-10 leading-relaxed font-medium px-4">This action <span class="font-bold text-red-500">cannot be undone</span>. All transactions in this file will be permanently removed.</p>
+            <div class="flex gap-4">
+                <button id="btnCancelDelete" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3.5 rounded-2xl transition-all">Cancel</button>
+                <button id="btnConfirmDelete" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3.5 rounded-2xl transition-all shadow-lg hover:shadow-red-200 hover:shadow-xl hover:-translate-y-0.5">
+                    Yes, Delete
                 </button>
             </div>
         </div>
     </div>
 
-    <div id="loginModal" class="fixed inset-0 bg-slate-900/50 z-[90] hidden flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-[2rem] w-full max-w-sm p-10 shadow-2xl text-center border border-white/50 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
-            <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm">
-                <i class="fa-solid fa-key text-2xl text-blue-600"></i>
+    <div id="loginModal" class="fixed inset-0 bg-gray-900/50 z-[90] hidden flex items-center justify-center p-4 backdrop-blur-md transition-opacity duration-500">
+        <div class="glass-panel rounded-[3rem] w-full max-w-md p-12 shadow-2xl text-center border border-white/50 relative overflow-hidden bg-white/90">
+            <div class="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-primary-500 via-purple-500 to-pink-500"></div>
+            <div class="w-20 h-20 bg-primary-50 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-md shadow-primary-100 ring-8 ring-primary-50/50">
+                <i class="fa-solid fa-shield-halved text-3xl text-primary-600"></i>
             </div>
-            <h2 class="text-2xl font-bold text-slate-900 mb-2">Admin Access</h2>
-            <p class="text-sm text-slate-500 mb-8">Enter your security code to manage data.</p>
-            <form id="loginForm" class="space-y-4 text-left">
-                <div>
-                    <input type="password" id="loginPass" class="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-xl focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-50 outline-none transition text-center font-bold tracking-widest text-lg placeholder:font-normal placeholder:tracking-normal placeholder:text-sm" placeholder="Enter Code">
+            <h2 class="text-3xl font-black text-gray-900 mb-3">Admin Access</h2>
+            <p class="text-base text-gray-500 mb-10 font-medium">Enter your security code to manage data.</p>
+            <form id="loginForm" class="space-y-6 text-left">
+                <div class="relative">
+                    <i class="fa-solid fa-lock absolute left-5 top-5 text-gray-400"></i>
+                    <input type="password" id="loginPass" class="w-full bg-gray-50 border-2 border-gray-200 px-6 py-4 pl-14 rounded-2xl focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-100 outline-none transition-all text-center font-bold tracking-[0.3em] text-xl placeholder:font-medium placeholder:tracking-normal placeholder:text-base placeholder:text-gray-400" placeholder="Enter Code">
                 </div>
-                <div id="loginError" class="text-red-500 text-xs text-center font-bold hidden bg-red-50 py-2 rounded-lg">Incorrect Password</div>
-                <button type="submit" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3.5 rounded-xl transition shadow-lg mt-2">Unlock Dashboard</button>
-                <button type="button" id="btnCancelLogin" class="w-full text-slate-400 text-sm font-bold py-2 hover:text-slate-600 transition">Cancel</button>
+                <div id="loginError" class="text-red-500 text-sm text-center font-bold hidden bg-red-50 py-3 rounded-xl border border-red-100 animate-pulse"><i class="fa-solid fa-circle-exclamation mr-2"></i> Incorrect Password</div>
+                <button type="submit" class="w-full bg-gradient-to-r from-gray-900 to-black hover:from-primary-700 hover:to-primary-900 text-white font-bold py-4 rounded-2xl transition-all shadow-xl hover:shadow-2xl mt-4 text-lg hover:-translate-y-0.5">Unlock Dashboard</button>
+                <button type="button" id="btnCancelLogin" class="w-full text-gray-500 text-sm font-bold py-3 hover:text-gray-700 transition-all hover:bg-gray-100 rounded-xl">Cancel</button>
             </form>
         </div>
     </div>
@@ -494,7 +577,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         // CONFIGURATION
         const firebaseConfig = {
@@ -518,6 +601,8 @@
         let displayTransactions = [];
         let donutChart = null;
         let stagingChart = null;
+        let trendChart = null; // New chart instance
+        let currentTrendMode = 'daily'; // daily | monthly
         let deleteTargetId = null;
         
         // PAGINATION STATE
@@ -540,18 +625,20 @@
             endDate: document.getElementById('endDate'),
             stagingFilter: document.getElementById('stagingFilter'),
             
-            // Auth Buttons
+            // Buttons
             btnLogin: document.getElementById('btnLogin'),
             btnLogout: document.getElementById('btnLogout'),
             userInfo: document.getElementById('userInfo'),
-            
-            // Actions
             btnOpenUpload: document.getElementById('btnOpenUpload'),
+            btnTrendDaily: document.getElementById('btnTrendDaily'), // New
+            btnTrendMonthly: document.getElementById('btnTrendMonthly'), // New
             
             // Display Values
             valSatria: document.getElementById('valSatria'),
             valTransferred: document.getElementById('valTransferred'),
             valPending: document.getElementById('valPending'),
+            valTotalAWB: document.getElementById('valTotalAWB'),
+            valTotalAmount: document.getElementById('valTotalAmount'),
             
             // Tables
             tableBody: document.getElementById('tableBody'),
@@ -569,9 +656,9 @@
         // --- DYNAMIC ISLAND SYSTEM ---
         const islandStates = {
             idle: { w: '0px', h: '0px', op: '0' },
-            loading: { w: '200px', h: '50px', op: '1' },
-            success: { w: '240px', h: '50px', op: '1' },
-            error: { w: '280px', h: '50px', op: '1' }
+            loading: { w: '220px', h: '56px', op: '1' },
+            success: { w: '260px', h: '56px', op: '1' },
+            error: { w: '300px', h: '56px', op: '1' }
         };
 
         function setIsland(state, message = "") {
@@ -586,18 +673,18 @@
             if (state === 'idle') return;
 
             const content = document.createElement('div');
-            content.className = 'island-content flex items-center gap-3 px-4 w-full h-full whitespace-nowrap justify-center';
+            content.className = 'island-content flex items-center gap-4 px-5 w-full h-full whitespace-nowrap justify-center';
             
             let icon = '';
             if(state === 'loading') {
                 icon = '<div class="spinner-ring"></div>';
             } else if (state === 'success') {
-                icon = '<i class="fa-solid fa-circle-check text-green-400 text-lg"></i>';
+                icon = '<i class="fa-solid fa-circle-check text-green-400 text-xl"></i>';
             } else if (state === 'error') {
-                icon = '<i class="fa-solid fa-circle-xmark text-red-500 text-lg"></i>';
+                icon = '<i class="fa-solid fa-circle-xmark text-red-500 text-xl"></i>';
             }
 
-            content.innerHTML = `${icon} <span class="text-sm font-medium tracking-wide">${message}</span>`;
+            content.innerHTML = `${icon} <span class="text-sm font-bold tracking-wide">${message}</span>`;
             island.appendChild(content);
 
             if (state === 'success' || state === 'error') {
@@ -618,19 +705,37 @@
 
         // --- NAVIGATION ---
         window.switchPage = (pageId) => {
-            document.getElementById('pageDashboard').classList.add('hidden');
-            document.getElementById('pageActivity').classList.add('hidden');
-            document.getElementById('nav-dashboard').classList.remove('active');
-            document.getElementById('nav-activity').classList.remove('active');
+            const dashboard = document.getElementById('pageDashboard');
+            const activity = document.getElementById('pageActivity');
+            const navDash = document.getElementById('nav-dashboard');
+            const navAct = document.getElementById('nav-activity');
 
             if(pageId === 'dashboard') {
-                document.getElementById('pageDashboard').classList.remove('hidden');
-                document.getElementById('nav-dashboard').classList.add('active');
+                activity.classList.add('hidden');
+                dashboard.classList.remove('hidden');
+                navAct.classList.remove('active');
+                navDash.classList.add('active');
                 loadDashboardData();
             } else {
-                document.getElementById('pageActivity').classList.remove('hidden');
-                document.getElementById('nav-activity').classList.add('active');
+                dashboard.classList.add('hidden');
+                activity.classList.remove('hidden');
+                navDash.classList.remove('active');
+                navAct.classList.add('active');
             }
+        };
+
+        // --- TREND CHART TOGGLE ---
+        window.setTrendMode = (mode) => {
+            currentTrendMode = mode;
+            // Update Button Styles
+            if (mode === 'daily') {
+                els.btnTrendDaily.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-primary-600 shadow-sm';
+                els.btnTrendMonthly.className = 'px-4 py-1.5 rounded-lg text-xs font-bold text-gray-500 hover:text-gray-700 transition-all';
+            } else {
+                els.btnTrendDaily.className = 'px-4 py-1.5 rounded-lg text-xs font-bold text-gray-500 hover:text-gray-700 transition-all';
+                els.btnTrendMonthly.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-primary-600 shadow-sm';
+            }
+            updateTrendChart(displayTransactions);
         };
 
         // --- AUTH ---
@@ -662,14 +767,19 @@
             document.getElementById('loginPass').value = '';
             document.getElementById('loginError').classList.add('hidden');
             els.loginModal.classList.remove('hidden');
+            setTimeout(() => els.loginModal.classList.remove('opacity-0'), 50);
         };
-        document.getElementById('btnCancelLogin').onclick = () => els.loginModal.classList.add('hidden');
+        document.getElementById('btnCancelLogin').onclick = () => {
+             els.loginModal.classList.add('opacity-0');
+             setTimeout(() => els.loginModal.classList.add('hidden'), 300);
+        };
         document.getElementById('loginForm').onsubmit = (e) => {
             e.preventDefault();
             if (document.getElementById('loginPass').value === 'Admin123') {
                 isAdmin = true;
                 updateUIState();
-                els.loginModal.classList.add('hidden');
+                els.loginModal.classList.add('opacity-0');
+                setTimeout(() => els.loginModal.classList.add('hidden'), 300);
                 setIsland('success', 'Welcome Admin!');
             } else {
                 document.getElementById('loginError').classList.remove('hidden');
@@ -716,7 +826,8 @@
 
                     data.items.forEach(item => {
                         if(item.staging && item.staging !== 'Unassigned') uniqueStagings.add(item.staging);
-                        items.push({ ...item, category: data.category });
+                        // Ensure we pass the date down for trend chart
+                        items.push({ ...item, category: data.category, date: data.date });
                     });
                 });
 
@@ -773,11 +884,18 @@
             els.valTransferred.innerText = formatIDR(totals.transferred);
             els.valPending.innerText = formatIDR(totals.pending);
 
+            // NEW: Top Level KPIs
+            const totalAWB = displayTransactions.length;
+            const totalAmount = totals.satria + totals.transferred + totals.pending;
+            document.getElementById('valTotalAWB').innerText = new Intl.NumberFormat('id-ID').format(totalAWB);
+            document.getElementById('valTotalAmount').innerText = formatIDR(totalAmount);
+
             // Reset Pagination on filter change
             currentPage = 1;
 
             updateDonutChart(totals);
             updateStagingChart(displayTransactions);
+            updateTrendChart(displayTransactions); // Render new Line Chart
             renderMainTable(displayTransactions);
             renderTopCouriers(displayTransactions);
         }
@@ -787,12 +905,108 @@
 
 
         // --- CHARTS ---
+        function updateTrendChart(data) {
+            const ctx = document.getElementById('trendChart').getContext('2d');
+            if (trendChart) trendChart.destroy();
+
+            // Aggregation Logic
+            const aggregated = {};
+            
+            data.forEach(item => {
+                let key;
+                if (currentTrendMode === 'daily') {
+                    // YYYY-MM-DD
+                    key = item.date; // already YYYY-MM-DD from upload date
+                } else {
+                    // YYYY-MM
+                    key = item.date.substring(0, 7); 
+                }
+                
+                if (!aggregated[key]) aggregated[key] = 0;
+                aggregated[key] += item.amount;
+            });
+
+            // Sort keys
+            const sortedKeys = Object.keys(aggregated).sort();
+            const values = sortedKeys.map(k => aggregated[k]);
+            
+            // Format Labels
+            const labels = sortedKeys.map(k => {
+                if(currentTrendMode === 'daily') {
+                    // Convert YYYY-MM-DD to DD/MM
+                    const parts = k.split('-');
+                    return `${parts[2]}/${parts[1]}`;
+                } else {
+                    // Convert YYYY-MM to Month Name YYYY
+                    const date = new Date(k + '-01');
+                    return date.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' });
+                }
+            });
+
+            // Gradient Fill
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(99, 102, 241, 0.5)'); // Indigo 500
+            gradient.addColorStop(1, 'rgba(99, 102, 241, 0.0)');
+
+            trendChart = new Chart(ctx, {
+                type: 'line',
+                plugins: [ChartDataLabels],
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Revenue',
+                        data: values,
+                        borderColor: '#6366f1',
+                        backgroundColor: gradient,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#6366f1',
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: true,
+                        tension: 0.4 // Smooth curve
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }, // Use datalabels instead
+                        datalabels: {
+                            align: 'top',
+                            formatter: (val) => formatIDR(val),
+                            font: { size: 10, weight: 'bold' },
+                            color: '#4b5563'
+                        }
+                    },
+                    scales: {
+                        y: { display: false }, // Hide Y Axis
+                        x: { 
+                            grid: { display: false },
+                            ticks: { font: { size: 11 } }
+                        }
+                    }
+                }
+            });
+        }
+
         function updateDonutChart(totals) {
             const ctx = document.getElementById('donutChart').getContext('2d');
             if (donutChart) donutChart.destroy();
 
-            // Colors for segments
-            const colors = ['#3B82F6', '#10B981', '#F97316']; 
+            // Modern Gradient Colors
+            const ctx1 = document.getElementById('donutChart').getContext('2d');
+            const gradientBlue = ctx1.createLinearGradient(0, 0, 0, 400);
+            gradientBlue.addColorStop(0, '#6366f1'); gradientBlue.addColorStop(1, '#3b82f6');
+
+            const gradientGreen = ctx1.createLinearGradient(0, 0, 0, 400);
+            gradientGreen.addColorStop(0, '#10b981'); gradientGreen.addColorStop(1, '#059669');
+
+            const gradientOrange = ctx1.createLinearGradient(0, 0, 0, 400);
+            gradientOrange.addColorStop(0, '#f97316'); gradientOrange.addColorStop(1, '#ea580c');
+
+            const colors = [gradientBlue, gradientGreen, gradientOrange]; 
             
             donutChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -802,16 +1016,24 @@
                         data: [totals.satria, totals.transferred, totals.pending],
                         backgroundColor: colors,
                         borderWidth: 0,
-                        hoverOffset: 15
+                        hoverOffset: 20,
+                        borderRadius: 8,
+                        spacing: 5
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: '80%', // Thinner modern look
+                    cutout: '75%',
+                    animation: { animateScale: true, animateRotate: true },
                     plugins: {
-                        legend: { display: false }, // Hide default legend
+                        legend: { display: false },
                         tooltip: { 
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleFont: { family: "'Inter', sans-serif", weight: 'bold' },
+                            bodyFont: { family: "'Inter', sans-serif" },
+                            padding: 12,
+                            cornerRadius: 12,
                             callbacks: {
                                 label: (ctx) => ' ' + formatIDR(ctx.raw)
                             }
@@ -820,32 +1042,38 @@
                 }
             });
 
-            // Render Custom Table Legend
+            // Render Custom Table Legend (Modern Style)
             const tableDiv = document.getElementById('donutLegendTable');
             tableDiv.innerHTML = `
                 <div class="space-y-4">
-                    <div class="flex items-center justify-between p-3 bg-blue-50/50 rounded-xl border border-blue-100 hover:scale-[1.02] transition-transform">
-                        <div class="flex items-center gap-3">
-                            <div class="w-3 h-3 rounded-full bg-blue-500"></div>
-                            <span class="text-xs font-bold text-slate-600 uppercase">Cash In Satria</span>
+                    <div class="flex items-center justify-between p-4 bg-white/60 rounded-2xl border border-blue-100/50 hover:scale-[1.03] transition-all shadow-sm hover:shadow-md group backdrop-blur-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md shadow-blue-200 group-hover:rotate-12 transition-transform"><i class="fa-solid fa-wallet text-white"></i></div>
+                            <div>
+                                <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Cash In Satria</p>
+                                <p class="text-lg font-black text-gray-800">${formatIDR(totals.satria)}</p>
+                            </div>
                         </div>
-                        <span class="text-sm font-bold text-slate-800">${formatIDR(totals.satria)}</span>
                     </div>
                     
-                    <div class="flex items-center justify-between p-3 bg-emerald-50/50 rounded-xl border border-emerald-100 hover:scale-[1.02] transition-transform">
-                        <div class="flex items-center gap-3">
-                            <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
-                            <span class="text-xs font-bold text-slate-600 uppercase">Cash Transferred</span>
+                    <div class="flex items-center justify-between p-4 bg-white/60 rounded-2xl border border-emerald-100/50 hover:scale-[1.03] transition-all shadow-sm hover:shadow-md group backdrop-blur-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-md shadow-emerald-200 group-hover:rotate-12 transition-transform"><i class="fa-solid fa-circle-check text-white"></i></div>
+                            <div>
+                                <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Cash Transferred</p>
+                                <p class="text-lg font-black text-gray-800">${formatIDR(totals.transferred)}</p>
+                            </div>
                         </div>
-                        <span class="text-sm font-bold text-slate-800">${formatIDR(totals.transferred)}</span>
                     </div>
 
-                    <div class="flex items-center justify-between p-3 bg-orange-50/50 rounded-xl border border-orange-100 hover:scale-[1.02] transition-transform">
-                        <div class="flex items-center gap-3">
-                            <div class="w-3 h-3 rounded-full bg-orange-500"></div>
-                            <span class="text-xs font-bold text-slate-600 uppercase">Pending</span>
+                    <div class="flex items-center justify-between p-4 bg-white/60 rounded-2xl border border-orange-100/50 hover:scale-[1.03] transition-all shadow-sm hover:shadow-md group backdrop-blur-sm">
+                        <div class="flex items-center gap-4">
+                             <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-md shadow-orange-200 group-hover:rotate-12 transition-transform"><i class="fa-solid fa-clock text-white"></i></div>
+                            <div>
+                                <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Pending</p>
+                                <p class="text-lg font-black text-gray-800">${formatIDR(totals.pending)}</p>
+                            </div>
                         </div>
-                        <span class="text-sm font-bold text-slate-800">${formatIDR(totals.pending)}</span>
                     </div>
                 </div>
             `;
@@ -859,21 +1087,22 @@
                 stagingGroups[s] += item.amount;
             });
 
-            // SORT: Highest to Lowest
             const sortedEntries = Object.entries(stagingGroups).sort(([,a], [,b]) => b - a);
             const labels = sortedEntries.map(e => e[0]);
             const values = sortedEntries.map(e => e[1]);
 
-            // DYNAMIC WIDTH CALCULATION
-            // Each bar gets at least 60px or minimal 100% of container
-            const minWidth = Math.max(100, labels.length * 60); 
+            // Ensure wrapper height adapts to number of bars for readability
             const wrapper = document.getElementById('stagingChartWrapper');
-            // Check if we need to force width (simple approximation via style)
-            // But canvas adapts to parent div size. We set parent div width.
-            wrapper.style.width = labels.length > 10 ? `${labels.length * 60}px` : '100%';
+            // Height calculation: min 400px, or 50px per bar
+            const newHeight = Math.max(400, labels.length * 50);
+            wrapper.style.height = `${newHeight}px`;
 
             const ctx = document.getElementById('stagingChart').getContext('2d');
             if (stagingChart) stagingChart.destroy();
+
+            // Gradient for horizontal bars
+            const gradientBar = ctx.createLinearGradient(0, 0, 400, 0);
+            gradientBar.addColorStop(0, '#818cf8'); gradientBar.addColorStop(1, '#4f46e5');
 
             stagingChart = new Chart(ctx, {
                 type: 'bar',
@@ -883,32 +1112,41 @@
                     datasets: [{
                         label: 'Total COD',
                         data: values,
-                        backgroundColor: '#6366f1',
-                        borderRadius: 6,
-                        barPercentage: 0.8 // 80% width
+                        backgroundColor: gradientBar,
+                        borderRadius: 8,
+                        barPercentage: 0.6,
+                        hoverBackgroundColor: '#4338ca'
                     }]
                 },
                 options: {
+                    indexAxis: 'y', // HORIZONTAL BARS
                     responsive: true,
                     maintainAspectRatio: false,
-                    layout: { padding: { top: 25 } }, 
+                    layout: { padding: { right: 50 } }, // Space for labels
+                    animation: { duration: 1000, easing: 'easeOutQuart' },
                     plugins: { 
                         legend: { display: false },
                         tooltip: { enabled: false },
                         datalabels: {
                             anchor: 'end',
-                            align: 'top',
+                            align: 'end', // Place value at end of bar
                             formatter: (val) => formatIDR(val),
-                            font: { weight: 'bold', size: 10, family: "'Plus Jakarta Sans', sans-serif" },
-                            color: '#64748b'
+                            font: { weight: 'bold', size: 11, family: "'Inter', sans-serif" },
+                            color: '#4b5563',
+                            offset: 4
                         }
                     },
                     scales: {
-                        y: { display: false }, // Hide Y Axis
-                        x: { 
+                        x: { display: false }, // HIDE X AXIS (Values)
+                        y: { 
                             grid: { display: false }, 
                             border: {display: false},
-                            ticks: { font: { size: 11, weight: '600' }, autoSkip: false, maxRotation: 45, minRotation: 45 }
+                            ticks: { 
+                                font: { size: 12, weight: '600', family: "'Inter', sans-serif" }, 
+                                color: '#374151',
+                                mirror: false, // Ensure labels are outside
+                                padding: 10
+                            }
                         }
                     }
                 }
@@ -917,7 +1155,6 @@
 
         // --- TABLES & PAGINATION ---
         
-        // Buttons Event Listeners
         els.btnPrevPage.onclick = () => {
             if(currentPage > 1) {
                 currentPage--;
@@ -944,21 +1181,21 @@
             container.innerHTML = '';
             
             if(sorted.length === 0) {
-                 container.innerHTML = '<div class="text-center py-10 text-slate-400 text-sm">No Data Available</div>';
+                 container.innerHTML = '<div class="text-center py-12 text-gray-400 text-sm font-medium bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">No Data Available</div>';
                  return;
             }
 
             sorted.forEach(([name, amount], index) => {
                 const div = document.createElement('div');
-                div.className = "flex items-center justify-between p-3 bg-white border border-slate-100 rounded-xl hover:shadow-md transition-shadow cursor-default group";
+                div.className = "flex items-center justify-between p-4 bg-white/80 border border-gray-100 rounded-2xl hover:shadow-md transition-all cursor-default group hover:border-primary-200 hover:bg-white backdrop-blur-sm";
                 div.innerHTML = `
-                    <div class="flex items-center gap-3 overflow-hidden">
-                        <div class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-500 text-[10px] flex-none group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    <div class="flex items-center gap-4 overflow-hidden">
+                        <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center font-bold text-gray-500 text-xs flex-none group-hover:bg-primary-600 group-hover:text-white transition-colors shadow-sm">
                             ${index + 1}
                         </div>
-                        <span class="truncate font-semibold text-slate-700 text-xs">${name}</span>
+                        <span class="truncate font-bold text-gray-700 text-sm">${name}</span>
                     </div>
-                    <span class="font-bold text-blue-600 text-xs">${formatIDR(amount)}</span>
+                    <span class="font-black text-primary-600 text-sm">${formatIDR(amount)}</span>
                 `;
                 container.appendChild(div);
             });
@@ -967,10 +1204,10 @@
         function renderMainTable(items) {
             const tbody = els.tableBody;
             tbody.innerHTML = '';
-            items.sort((a,b) => b.amount - a.amount); // Sort by Amount Desc
+            items.sort((a,b) => b.amount - a.amount);
             
             if(items.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center text-slate-400">No transactions match your criteria.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-16 text-center text-gray-400 font-medium bg-white/30 rounded-2xl m-2 border border-dashed border-gray-200">No transactions match your criteria.</td></tr>';
                 els.showingText.innerText = "Showing 0 entries";
                 els.pageInfo.innerText = "1";
                 els.btnPrevPage.disabled = true;
@@ -982,7 +1219,6 @@
             const totalItems = items.length;
             const totalPages = Math.ceil(totalItems / itemsPerPage);
             
-            // Adjust current page if out of bounds
             if (currentPage > totalPages) currentPage = totalPages;
             if (currentPage < 1) currentPage = 1;
 
@@ -991,26 +1227,25 @@
             const paginatedItems = items.slice(startIndex, endIndex);
 
             // Render Rows
-            paginatedItems.forEach(item => {
+            paginatedItems.forEach((item, index) => {
                 let badgeClass = '';
-                let badgeText = '';
-                if(item.category === 'satria') { badgeClass = 'bg-blue-50 text-blue-700 border-blue-100'; badgeText = 'In Satria'; }
-                else if(item.category === 'transferred') { badgeClass = 'bg-emerald-50 text-emerald-700 border-emerald-100'; badgeText = 'Transferred'; }
-                else { badgeClass = 'bg-orange-50 text-orange-700 border-orange-100'; badgeText = 'Pending'; }
+                let icon = '';
+                if(item.category === 'satria') { badgeClass = 'bg-blue-50 text-blue-700 border-blue-200 ring-blue-100'; icon='<i class="fa-solid fa-wallet mr-1.5"></i> In Satria'; }
+                else if(item.category === 'transferred') { badgeClass = 'bg-emerald-50 text-emerald-700 border-emerald-200 ring-emerald-100'; icon='<i class="fa-solid fa-circle-check mr-1.5"></i> Transferred'; }
+                else { badgeClass = 'bg-orange-50 text-orange-700 border-orange-200 ring-orange-100'; icon='<i class="fa-solid fa-clock mr-1.5"></i> Pending'; }
 
                 const tr = document.createElement('tr');
-                tr.className = "bg-white hover:bg-slate-50 transition-colors";
+                tr.className = "bg-white/40 hover:bg-white transition-all group border-b border-gray-100 last:border-0 backdrop-blur-sm";
                 tr.innerHTML = `
-                    <td class="px-6 py-4 font-bold text-slate-800 font-mono text-xs">${item.awb}</td>
-                    <td class="px-6 py-4 text-slate-600 truncate max-w-xs font-medium">${item.name}</td>
-                    <td class="px-6 py-4 text-slate-500 text-xs">${item.staging || '-'}</td>
-                    <td class="px-6 py-4"><span class="border ${badgeClass} text-[10px] uppercase font-bold px-2 py-1 rounded-md tracking-wide">${badgeText}</span></td>
-                    <td class="px-6 py-4 text-right font-bold text-slate-800">${formatIDR(item.amount)}</td>
+                    <td class="px-6 py-5 font-bold text-gray-800 font-mono text-xs first:rounded-l-2xl group-hover:text-primary-700 transition-colors">${item.awb}</td>
+                    <td class="px-6 py-5 text-gray-600 truncate max-w-xs font-semibold text-sm">${item.name}</td>
+                    <td class="px-6 py-5 text-gray-500 text-sm font-medium"><span class="bg-gray-100 px-2 py-1 rounded-md border border-gray-200">${item.staging || '-'}</span></td>
+                    <td class="px-6 py-5"><span class="border ${badgeClass} ring-2 text-[11px] uppercase font-bold px-3 py-1.5 rounded-lg tracking-wide flex items-center w-fit shadow-sm">${icon}</span></td>
+                    <td class="px-6 py-5 text-right font-black text-gray-800 last:rounded-r-2xl text-sm">${formatIDR(item.amount)}</td>
                 `;
                 tbody.appendChild(tr);
             });
 
-            // Update Pagination UI
             els.showingText.innerText = `Showing ${startIndex + 1} to ${Math.min(endIndex, totalItems)} of ${totalItems} entries`;
             els.pageInfo.innerText = `${currentPage} / ${totalPages}`;
             
@@ -1023,28 +1258,35 @@
             tbody.innerHTML = '';
             
             if(allUploads.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center text-slate-400">No upload history found.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-16 text-center text-gray-400 font-medium bg-white/30 rounded-2xl m-4 border border-dashed border-gray-200">No upload history found.</td></tr>';
                 return;
             }
 
             allUploads.forEach(u => {
-                let catName = u.cat === 'satria' ? 'Cash In Satria' : (u.cat === 'transferred' ? 'Cash Transferred' : 'To Be Transferred');
+                let catBadges = '';
+                if(u.cat === 'satria') catBadges = '<span class="bg-blue-50 text-blue-700 border border-blue-200 text-[11px] uppercase font-bold px-3 py-1.5 rounded-lg flex items-center w-fit shadow-sm gap-1.5"><i class="fa-solid fa-wallet"></i> Cash In Satria</span>';
+                else if(u.cat === 'transferred') catBadges = '<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] uppercase font-bold px-3 py-1.5 rounded-lg flex items-center w-fit shadow-sm gap-1.5"><i class="fa-solid fa-circle-check"></i> Cash Transferred</span>';
+                else catBadges = '<span class="bg-orange-50 text-orange-700 border border-orange-200 text-[11px] uppercase font-bold px-3 py-1.5 rounded-lg flex items-center w-fit shadow-sm gap-1.5"><i class="fa-solid fa-clock"></i> To Be Transferred</span>';
+
                 
                 const actions = isAdmin ? `
-                    <div class="flex justify-end gap-2">
-                         <button class="bg-blue-50 text-blue-600 hover:bg-blue-100 w-8 h-8 rounded-lg flex items-center justify-center transition btn-edit" data-id="${u.id}" data-cat="${u.cat}"><i class="fa-solid fa-pen text-xs"></i></button>
-                         <button class="bg-red-50 text-red-600 hover:bg-red-100 w-8 h-8 rounded-lg flex items-center justify-center transition btn-delete" data-id="${u.id}"><i class="fa-solid fa-trash text-xs"></i></button>
+                    <div class="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                         <button class="bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700 p-2.5 rounded-xl flex items-center justify-center transition-all shadow-sm hover:shadow btn-edit border border-blue-100" data-id="${u.id}" data-cat="${u.cat}" title="Edit Category"><i class="fa-solid fa-pen-to-square"></i></button>
+                         <button class="bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 p-2.5 rounded-xl flex items-center justify-center transition-all shadow-sm hover:shadow btn-delete border border-red-100" data-id="${u.id}" title="Delete File"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
-                ` : '<span class="text-slate-300 text-xs italic">Read Only</span>';
+                ` : '<span class="text-gray-400 text-xs font-medium italic bg-gray-100 px-3 py-1 rounded-full">Read Only</span>';
 
                 const tr = document.createElement('tr');
-                tr.className = "bg-white hover:bg-slate-50 border-b border-slate-50";
+                tr.className = "bg-white/50 hover:bg-white transition-all group rounded-2xl backdrop-blur-sm m-2 shadow-sm hover:shadow-md border border-gray-100/50";
                 tr.innerHTML = `
-                    <td class="px-6 py-4 font-bold text-slate-800">${u.date}</td>
-                    <td class="px-6 py-4 text-slate-600 font-medium">${u.name}</td>
-                    <td class="px-6 py-4"><span class="bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1.5 rounded-lg border border-slate-200">${catName}</span></td>
-                    <td class="px-6 py-4 text-slate-400 text-xs font-medium">${u.time}</td>
-                    <td class="px-6 py-4 text-right">${actions}</td>
+                    <td class="px-6 py-5 font-bold text-gray-800 first:rounded-l-2xl">${u.date}</td>
+                    <td class="px-6 py-5 text-gray-700 font-semibold flex items-center gap-3">
+                        <div class="p-2 bg-gray-100 rounded-lg text-gray-500"><i class="fa-solid fa-file-csv"></i></div>
+                        ${u.name}
+                    </td>
+                    <td class="px-6 py-5">${catBadges}</td>
+                    <td class="px-6 py-5 text-gray-500 text-sm font-medium flex items-center gap-2"><i class="fa-regular fa-calendar-days"></i> ${u.time}</td>
+                    <td class="px-6 py-5 text-right last:rounded-r-2xl">${actions}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -1057,10 +1299,21 @@
 
 
         // --- UPLOAD ---
-        els.btnOpenUpload.onclick = () => document.getElementById('uploadModal').classList.remove('hidden');
-        document.getElementById('btnCloseUpload').onclick = () => document.getElementById('uploadModal').classList.add('hidden');
+        els.btnOpenUpload.onclick = () => {
+            document.getElementById('uploadModal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('uploadModal').classList.remove('opacity-0'), 50);
+        };
+        document.getElementById('btnCloseUpload').onclick = () => {
+            document.getElementById('uploadModal').classList.add('opacity-0');
+            setTimeout(() => document.getElementById('uploadModal').classList.add('hidden'), 300);
+        };
         document.getElementById('csvFile').onchange = (e) => {
-            document.getElementById('fileNameDisplay').innerText = e.target.files[0]?.name || "Click to browse file";
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                 document.getElementById('fileNameDisplay').innerHTML = `<span class="text-primary-700"><i class="fa-solid fa-check-circle mr-2"></i> Selected:</span> ${fileName}`;
+            } else {
+                 document.getElementById('fileNameDisplay').innerText = "Click or drag to upload file";
+            }
         };
 
         function parseCSV(csvText) {
@@ -1093,6 +1346,29 @@
             return results;
         }
 
+        // --- NEW: DUPLICATE CHECK LOGIC ---
+        async function getExistingAWBs(date) {
+            // Fetch all transactions for this date to check for duplicates
+            const q = query(
+                collection(db, 'artifacts', APP_ID, 'public', 'data', 'transactions'),
+                where("date", "==", date)
+            );
+            
+            const snapshot = await getDocs(q);
+            const existingAWBs = new Set();
+            
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                if (data.items && Array.isArray(data.items)) {
+                    data.items.forEach(item => {
+                        if (item.awb) existingAWBs.add(item.awb);
+                    });
+                }
+            });
+            
+            return existingAWBs;
+        }
+
         document.getElementById('uploadForm').onsubmit = async (e) => {
             e.preventDefault();
             const file = document.getElementById('csvFile').files[0];
@@ -1101,49 +1377,75 @@
             
             if(!file) return;
 
-            // Island: Loading
-            document.getElementById('uploadModal').classList.add('hidden');
-            setIsland('loading', 'Processing CSV...');
+            document.getElementById('uploadModal').classList.add('opacity-0');
+            setTimeout(() => document.getElementById('uploadModal').classList.add('hidden'), 300);
+            setIsland('loading', 'Checking for duplicates...');
 
             try {
+                // 1. Fetch Existing AWBs for this date
+                const existingAWBs = await getExistingAWBs(date);
+                
+                // 2. Parse CSV
                 const text = await file.text();
                 const parsedData = parseCSV(text);
-                const batchTotal = parsedData.reduce((acc, curr) => acc + curr.amount, 0);
+                
+                // 3. Filter Duplicates
+                const uniqueData = parsedData.filter(item => !existingAWBs.has(item.awb));
+                const skippedCount = parsedData.length - uniqueData.length;
+
+                if (uniqueData.length === 0) {
+                    setIsland('error', 'All data duplicate!');
+                    return;
+                }
+
+                // 4. Upload Unique Data
+                const batchTotal = uniqueData.reduce((acc, curr) => acc + curr.amount, 0);
 
                 await addDoc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'transactions'), {
                     date: date,
                     category: category,
-                    items: parsedData,
+                    items: uniqueData,
                     totalAmount: batchTotal,
                     uploadedAt: new Date(),
                     fileName: file.name,
-                    uploaderId: currentUser ? currentUser.uid : 'anon'
+                    uploaderId: currentUser ? currentUser.uid : 'anon',
+                    skippedCount: skippedCount // Record how many skipped
                 });
 
                 document.getElementById('uploadForm').reset();
-                setIsland('success', 'Upload Complete');
+                document.getElementById('fileNameDisplay').innerText = "Click or drag to upload file";
+                
+                if (skippedCount > 0) {
+                    setIsland('success', `Added ${uniqueData.length}, Skipped ${skippedCount}`);
+                } else {
+                    setIsland('success', 'Upload Complete');
+                }
+                
                 loadDashboardData();
 
             } catch (err) {
                 console.error(err);
                 setIsland('error', 'Upload Failed');
-                document.getElementById('uploadModal').classList.remove('hidden'); // Reopen if failed
+                setTimeout(() => {
+                    document.getElementById('uploadModal').classList.remove('hidden');
+                    setTimeout(() => document.getElementById('uploadModal').classList.remove('opacity-0'), 50);
+                }, 1500);
             }
         };
 
         // --- DELETE ---
         window.openDeleteModal = (id) => {
             deleteTargetId = id;
-            els.deleteModal.classList.remove('hidden');
+            document.getElementById('deleteModal').classList.remove('hidden');
         };
         document.getElementById('btnCancelDelete').onclick = () => {
             deleteTargetId = null;
-            els.deleteModal.classList.add('hidden');
+            document.getElementById('deleteModal').classList.add('hidden');
         };
         document.getElementById('btnConfirmDelete').onclick = async () => {
             if (!deleteTargetId) return;
 
-            els.deleteModal.classList.add('hidden');
+            document.getElementById('deleteModal').classList.add('hidden');
             setIsland('loading', 'Deleting Data...');
 
             try {
