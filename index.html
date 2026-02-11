@@ -430,6 +430,11 @@
                                     <span class="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center animate-pulse-slow"><i class="fa-solid fa-triangle-exclamation"></i></span>
                                     Pending Cash
                                 </h3>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="copyPendingData()" class="bg-white hover:bg-red-100 text-red-600 p-2 rounded-lg transition-colors shadow-sm border border-red-100" title="Salin Data Pending">
+                                        <i class="fa-regular fa-copy"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div class="overflow-auto flex-1 bg-white/40">
                                 <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-2">
@@ -634,7 +639,6 @@
         const db = getFirestore(app);
         const APP_ID = "dailyreport-cfc8f"; 
 
-        // STATE DECLARATIONS
         let currentUser = null, isAdmin = false, rawTransactions = [], displayTransactions = [], allUploads = [], donutChart = null, stagingChart = null, trendChart = null, currentTrendMode = 'daily', deleteTargetId = null, currentPage = 1, selectedStagings = new Set(['ALL']), selectedCoordinators = new Set(['ALL']);
         let coordinatorsMap = {}; 
         const itemsPerPage = 100;
@@ -1136,6 +1140,57 @@
             modal.classList.remove('hidden');
         };
 
+        // --- COPY PENDING DATA ---
+        window.copyPendingData = () => {
+            const pendingList = displayTransactions.filter(i => i.category !== 'transferred');
+            
+            if (pendingList.length === 0) {
+                setIsland('error', 'No Pending Data');
+                return;
+            }
+
+            // SORTING: SS -> NIK -> Status -> Resi
+            pendingList.sort((a, b) => {
+                const sA = a.staging || '';
+                const sB = b.staging || '';
+                if (sA !== sB) return sA.localeCompare(sB);
+
+                const nA = a.nik || '';
+                const nB = b.nik || '';
+                if (nA !== nB) return nA.localeCompare(nB);
+
+                const cA = a.category || '';
+                const cB = b.category || '';
+                if (cA !== cB) return cA.localeCompare(cB);
+
+                return (a.awb || '').localeCompare(b.awb || '');
+            });
+
+            // Format: Kode SS | NIK | Status | Resi
+            const textToCopy = pendingList.map(item => {
+                const status = item.category === 'satria' ? 'CASH IN SATRIA' : 'PENDING';
+                const nik = item.nik || '-';
+                return `${item.staging} | ${nik} | ${status} | ${item.awb}`;
+            }).join('\n');
+
+            try {
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                if (successful) setIsland('success', `Copied ${pendingList.length} Rows`);
+                else throw new Error('Copy failed');
+            } catch (err) {
+                console.error(err);
+                setIsland('error', 'Copy Failed');
+            }
+        };
+
         // Upload
         els.btnOpenUpload.onclick = () => els.uploadModal.classList.remove('hidden');
         document.getElementById('btnCloseUpload').onclick = () => els.uploadModal.classList.add('hidden');
@@ -1150,8 +1205,16 @@
         function parseCSV(txt) {
             const lines = txt.replace(/\r/g,'').trim().split('\n'); if(lines.length<2) return [];
             const headers = lines[0].split('|').map(h=>h.toLowerCase());
-            // Add 'hub' index
-            const idx = { awb:headers.indexOf('awb'), amt:headers.indexOf('actual_amount'), name:headers.indexOf('name'), stg:headers.indexOf('delivery_staging'), hub:headers.indexOf('delivery_hub') };
+            
+            const idx = { 
+                awb: headers.indexOf('awb'), 
+                amt: headers.indexOf('actual_amount'), 
+                name: headers.indexOf('name'), 
+                stg: headers.indexOf('delivery_staging'), 
+                hub: headers.indexOf('delivery_hub'),
+                nik: headers.indexOf('latest_id') // UPDATE: Ambil NIK dari latest_id
+            };
+
             return lines.slice(1).map(l => {
                 const r = l.split('|'); if(r.length<headers.length) return null;
                 const amt = parseFloat((r[idx.amt]||"0").replace(/[^0-9.-]+/g,""));
@@ -1160,7 +1223,8 @@
                     amount: isNaN(amt)?0:amt, 
                     name: r[idx.name]||'Unknown', 
                     staging: (idx.stg>-1&&r[idx.stg])?r[idx.stg].trim():'Unassigned',
-                    hub: (idx.hub>-1&&r[idx.hub])?r[idx.hub].trim():'-'
+                    hub: (idx.hub>-1&&r[idx.hub])?r[idx.hub].trim():'-',
+                    nik: (idx.nik>-1&&r[idx.nik])?r[idx.nik].trim():'-' // Simpan NIK
                 };
             }).filter(i=>i&&i.awb);
         }
