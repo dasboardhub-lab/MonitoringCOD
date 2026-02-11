@@ -7,6 +7,47 @@
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a',
+                        },
+                        indigo: {
+                            500: '#6366f1', 600: '#4f46e5',
+                        },
+                        violet: {
+                            500: '#8b5cf6', 600: '#7c3aed',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'slide-up-fade': 'slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        slideUpFade: {
+                            '0%': { opacity: 0, transform: 'translateY(20px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'glow': '0 0 15px rgba(99, 102, 241, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,16 +60,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* Base Settings */
         body { 
-            font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #f8fafc; 
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
                 radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 40%);
         }
         
-        /* Glass Panel Effect */
         .glass-panel { 
             background: rgba(255, 255, 255, 0.7); 
             backdrop-filter: blur(20px);
@@ -51,7 +89,7 @@
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
         .nav-item { 
@@ -59,25 +97,6 @@
         }
         .nav-item:hover { color: #0f172a; background: #f1f5f9; }
         .nav-item.active { color: #ffffff; background: #0f172a; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2); }
-
-        /* Animations */
-        @keyframes slideUpFade {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        .animate-slide-up-fade { animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        .animate-float { animation: float 6s ease-in-out infinite; }
-
-        @keyframes pulse-slow {
-            0%, 100% { opacity: 1; }
-            50% { opacity: .5; }
-        }
-        .animate-pulse-slow { animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
 
         /* Staggered Animation Delays */
         .delay-100 { animation-delay: 100ms; }
@@ -88,11 +107,6 @@
 
         /* Dynamic Island */
         #dynamic-island { transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-        .island-content { animation: islandFadeIn 0.4s ease-out forwards; }
-        @keyframes islandFadeIn {
-            from { opacity: 0; transform: scale(0.9) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
         .spinner-ring { border: 2px solid rgba(255,255,255,0.2); border-left-color: #fff; border-radius: 50%; width: 18px; height: 18px; animation: spin 0.8s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
@@ -129,6 +143,7 @@
             <div class="hidden md:flex gap-1 bg-slate-100/80 p-1 rounded-full border border-slate-200">
                 <a onclick="switchPage('dashboard')" id="nav-dashboard" class="nav-item active text-sm">Dashboard</a>
                 <a onclick="switchPage('activity')" id="nav-activity" class="nav-item text-sm">Upload Data</a>
+                <a onclick="switchPage('settings')" id="nav-settings" class="nav-item text-sm hidden">Settings</a>
             </div>
         </div>
 
@@ -155,8 +170,8 @@
         <div id="pageDashboard" class="h-full flex flex-col overflow-hidden animate-slide-up-fade">
             
             <!-- Top Controls -->
-            <div class="px-8 py-6 flex flex-col md:flex-row gap-4 items-center justify-between flex-none z-20">
-                <div class="flex flex-col md:flex-row gap-3 items-center w-full md:w-auto p-1.5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+            <div class="px-8 py-6 flex flex-col xl:flex-row gap-4 items-center justify-between flex-none z-20">
+                <div class="flex flex-col md:flex-row gap-3 items-center w-full xl:w-auto p-1.5 bg-white border border-slate-200 rounded-2xl shadow-sm">
                     <!-- Date Picker -->
                     <div class="flex items-center gap-2 px-4">
                         <div class="flex flex-col">
@@ -172,12 +187,26 @@
 
                     <div class="hidden md:block w-px h-8 bg-slate-100 mx-2"></div>
 
+                    <!-- Coordinator Filter (New) -->
+                     <div class="relative min-w-[200px]" id="coordFilterContainer">
+                        <button id="coordDropdownBtn" class="w-full hover:bg-slate-50 border border-transparent hover:border-slate-200 text-slate-700 font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-between transition-all group">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-user-tie"></i></span>
+                                <span id="coordBtnText" class="truncate max-w-[120px]">All Coordinators</span>
+                            </div>
+                            <i class="fa-solid fa-caret-down text-slate-400 group-hover:text-violet-500 transition-colors"></i>
+                        </button>
+                        <div id="coordDropdownMenu" class="hidden absolute top-full left-0 w-full mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 z-50 max-h-60 overflow-y-auto custom-scroll ring-1 ring-black/5">
+                            <!-- JS Populated -->
+                        </div>
+                    </div>
+
                     <!-- Staging Dropdown -->
-                    <div class="relative min-w-[240px]" id="stagingFilterContainer">
+                    <div class="relative min-w-[200px]" id="stagingFilterContainer">
                         <button id="stagingDropdownBtn" class="w-full hover:bg-slate-50 border border-transparent hover:border-slate-200 text-slate-700 font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-between transition-all group">
                             <div class="flex items-center gap-2">
                                 <span class="w-6 h-6 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-filter"></i></span>
-                                <span id="stagingBtnText" class="truncate max-w-[140px]">All Stagings</span>
+                                <span id="stagingBtnText" class="truncate max-w-[120px]">All Stagings</span>
                             </div>
                             <i class="fa-solid fa-caret-down text-slate-400 group-hover:text-indigo-500 transition-colors"></i>
                         </button>
@@ -192,7 +221,7 @@
                 </div>
                 
                 <!-- Search -->
-                 <div class="w-full md:w-80 relative group">
+                 <div class="w-full xl:w-80 relative group">
                     <i class="fa-solid fa-search absolute left-4 top-3.5 text-slate-400 group-focus-within:text-indigo-500 transition-colors text-sm"></i>
                     <input type="text" id="searchTable" placeholder="Search by AWB, Name..." class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-xs font-bold focus:outline-none focus:ring-4 focus:ring-indigo-50 focus:border-indigo-300 transition-all shadow-sm">
                 </div>
@@ -342,9 +371,33 @@
                         </div>
                     </div>
 
-                    <!-- MONITORING TABLES (HUB & PENDING SATRIA) -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-slide-up-fade delay-500">
+                    <!-- MONITORING TABLES (COORDINATOR, HUB & PENDING SATRIA) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-slide-up-fade delay-500">
                         
+                        <!-- Coordinator Performance (NEW) -->
+                        <div class="glass-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[500px]">
+                            <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                    <span class="w-8 h-8 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-user-tie"></i></span>
+                                    Coordinator
+                                </h3>
+                            </div>
+                            <div class="overflow-auto flex-1 bg-white/40">
+                                <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-2">
+                                    <thead class="text-[10px] text-slate-500 font-bold uppercase bg-slate-50/90 sticky top-0 z-10 backdrop-blur-sm shadow-sm">
+                                        <tr>
+                                            <th class="px-6 py-4 first:rounded-l-xl">Coordinator</th>
+                                            <th class="px-6 py-4 text-center">AWB</th>
+                                            <th class="px-6 py-4 text-right last:rounded-r-xl">Total Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="coordTableBody" class="divide-y divide-transparent">
+                                        <!-- JS Populated -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                         <!-- HUB Performance -->
                         <div class="glass-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[500px]">
                             <div class="p-6 border-b border-slate-100 bg-slate-50/50">
@@ -358,8 +411,8 @@
                                     <thead class="text-[10px] text-slate-500 font-bold uppercase bg-slate-50/90 sticky top-0 z-10 backdrop-blur-sm shadow-sm">
                                         <tr>
                                             <th class="px-6 py-4 first:rounded-l-xl">HUB Name</th>
-                                            <th class="px-6 py-4 text-center">AWB Count</th>
-                                            <th class="px-6 py-4 text-right">Total Amount</th>
+                                            <th class="px-6 py-4 text-center">AWB</th>
+                                            <th class="px-6 py-4 text-right">Amount</th>
                                             <th class="px-6 py-4 text-center last:rounded-r-xl">Action</th>
                                         </tr>
                                     </thead>
@@ -375,18 +428,16 @@
                             <div class="p-6 border-b border-slate-100 bg-red-50/30 flex justify-between items-center">
                                 <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
                                     <span class="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center animate-pulse-slow"><i class="fa-solid fa-triangle-exclamation"></i></span>
-                                    Pending / Cash In Satria
+                                    Pending Cash
                                 </h3>
-                                <span class="text-[10px] font-bold text-red-500 bg-red-100 px-2 py-1 rounded-full uppercase">Action Needed</span>
                             </div>
                             <div class="overflow-auto flex-1 bg-white/40">
                                 <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-2">
                                     <thead class="text-[10px] text-slate-500 font-bold uppercase bg-slate-50/90 sticky top-0 z-10 backdrop-blur-sm shadow-sm">
                                         <tr>
-                                            <th class="px-6 py-4 first:rounded-l-xl">Satria Name</th>
-                                            <th class="px-6 py-4">Staging</th>
+                                            <th class="px-6 py-4 first:rounded-l-xl">Satria</th>
                                             <th class="px-6 py-4 text-center">Status</th>
-                                            <th class="px-6 py-4 text-right last:rounded-r-xl">Pending Amount</th>
+                                            <th class="px-6 py-4 text-right last:rounded-r-xl">Pending</th>
                                         </tr>
                                     </thead>
                                     <tbody id="pendingSatriaTableBody" class="divide-y divide-transparent">
@@ -481,6 +532,35 @@
                 </div>
             </div>
         </div>
+
+        <!-- SETTINGS PAGE (NEW) -->
+        <div id="pageSettings" class="h-full flex flex-col overflow-hidden hidden bg-white/30 backdrop-blur-lg page-transition">
+            <div class="flex-1 overflow-y-auto p-8 lg:p-12">
+                <div class="max-w-4xl mx-auto space-y-8">
+                    <div class="animate-slide-up-fade">
+                        <h2 class="text-3xl font-black text-slate-800 tracking-tight">Staging Coordinators</h2>
+                        <p class="text-slate-500 mt-2 font-medium">Assign specific coordinators to each staging area detected in the system.</p>
+                    </div>
+
+                    <div class="glass-panel overflow-hidden rounded-3xl border border-white/60 animate-slide-up-fade delay-100">
+                         <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left border-separate border-spacing-y-2 px-4 py-2">
+                                <thead class="text-xs text-slate-500 font-bold uppercase bg-slate-50/50">
+                                    <tr>
+                                        <th class="px-6 py-4 first:rounded-l-2xl">Staging Name</th>
+                                        <th class="px-6 py-4">Assigned Coordinator</th>
+                                        <th class="px-6 py-4 text-right last:rounded-r-2xl">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="coordinatorsTableBody" class="divide-y divide-transparent">
+                                    <!-- JS populated -->
+                                </tbody>
+                            </table>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- MODALS -->
@@ -546,7 +626,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyCxYJjxiabLIXkSSEw9TjKWK1dRYUtb3YE", authDomain: "dailyreport-cfc8f.firebaseapp.com", projectId: "dailyreport-cfc8f", storageBucket: "dailyreport-cfc8f.firebasestorage.app", messagingSenderId: "963104518926", appId: "1:963104518926:web:a1d6eb1cf93834bf8c5d5f" };
         const app = initializeApp(firebaseConfig);
@@ -554,18 +634,55 @@
         const db = getFirestore(app);
         const APP_ID = "dailyreport-cfc8f"; 
 
-        // STATE DECLARATIONS
-        let currentUser = null, isAdmin = false, rawTransactions = [], displayTransactions = [], allUploads = [], donutChart = null, stagingChart = null, trendChart = null, currentTrendMode = 'daily', deleteTargetId = null, currentPage = 1, selectedStagings = new Set(['ALL']);
+        let currentUser = null, isAdmin = false, rawTransactions = [], displayTransactions = [], allUploads = [], donutChart = null, stagingChart = null, trendChart = null, currentTrendMode = 'daily', deleteTargetId = null, currentPage = 1, selectedStagings = new Set(['ALL']), selectedCoordinators = new Set(['ALL']);
+        let coordinatorsMap = {}; 
         const itemsPerPage = 100;
 
-        const els = { island: document.getElementById('dynamic-island'), loginModal: document.getElementById('loginModal'), uploadModal: document.getElementById('uploadModal'), editModal: document.getElementById('editModal'), deleteModal: document.getElementById('deleteModal'), startDate: document.getElementById('startDate'), endDate: document.getElementById('endDate'), stagingDropdownBtn: document.getElementById('stagingDropdownBtn'), stagingDropdownMenu: document.getElementById('stagingDropdownMenu'), stagingBtnText: document.getElementById('stagingBtnText'), btnLogin: document.getElementById('btnLogin'), btnLogout: document.getElementById('btnLogout'), userInfo: document.getElementById('userInfo'), btnOpenUpload: document.getElementById('btnOpenUpload'), btnTrendDaily: document.getElementById('btnTrendDaily'), btnTrendMonthly: document.getElementById('btnTrendMonthly'), valSatria: document.getElementById('valSatria'), valTransferred: document.getElementById('valTransferred'), valPending: document.getElementById('valPending'), valTotalAWB: document.getElementById('valTotalAWB'), valTotalAmount: document.getElementById('valTotalAmount'), tableBody: document.getElementById('tableBody'), searchTable: document.getElementById('searchTable'), activityTableBody: document.getElementById('activityTableBody'), topCouriersList: document.getElementById('topCouriersList'), hubTableBody: document.getElementById('hubTableBody'), pendingSatriaTableBody: document.getElementById('pendingSatriaTableBody'), showingText: document.getElementById('showingText'), pageInfo: document.getElementById('pageInfo'), btnPrevPage: document.getElementById('btnPrevPage'), btnNextPage: document.getElementById('btnNextPage') };
+        const els = { 
+            island: document.getElementById('dynamic-island'), 
+            loginModal: document.getElementById('loginModal'), 
+            uploadModal: document.getElementById('uploadModal'), 
+            editModal: document.getElementById('editModal'), 
+            deleteModal: document.getElementById('deleteModal'), 
+            startDate: document.getElementById('startDate'), 
+            endDate: document.getElementById('endDate'), 
+            stagingDropdownBtn: document.getElementById('stagingDropdownBtn'), 
+            stagingDropdownMenu: document.getElementById('stagingDropdownMenu'), 
+            stagingBtnText: document.getElementById('stagingBtnText'),
+            // Coordinator Filter Refs
+            coordDropdownBtn: document.getElementById('coordDropdownBtn'),
+            coordDropdownMenu: document.getElementById('coordDropdownMenu'),
+            coordBtnText: document.getElementById('coordBtnText'),
+            // ...
+            btnLogin: document.getElementById('btnLogin'), 
+            btnLogout: document.getElementById('btnLogout'), 
+            userInfo: document.getElementById('userInfo'), 
+            btnOpenUpload: document.getElementById('btnOpenUpload'), 
+            btnTrendDaily: document.getElementById('btnTrendDaily'), 
+            btnTrendMonthly: document.getElementById('btnTrendMonthly'), 
+            valSatria: document.getElementById('valSatria'), 
+            valTransferred: document.getElementById('valTransferred'), 
+            valPending: document.getElementById('valPending'), 
+            valTotalAWB: document.getElementById('valTotalAWB'), 
+            valTotalAmount: document.getElementById('valTotalAmount'), 
+            tableBody: document.getElementById('tableBody'), 
+            searchTable: document.getElementById('searchTable'), 
+            activityTableBody: document.getElementById('activityTableBody'), 
+            topCouriersList: document.getElementById('topCouriersList'), 
+            hubTableBody: document.getElementById('hubTableBody'), 
+            pendingSatriaTableBody: document.getElementById('pendingSatriaTableBody'), 
+            coordTableBody: document.getElementById('coordTableBody'),
+            showingText: document.getElementById('showingText'), 
+            pageInfo: document.getElementById('pageInfo'), 
+            btnPrevPage: document.getElementById('btnPrevPage'), 
+            btnNextPage: document.getElementById('btnNextPage'),
+            // Settings refs
+            navSettings: document.getElementById('nav-settings'),
+            coordinatorsTableBody: document.getElementById('coordinatorsTableBody')
+        };
 
-        // --- SMART FORMATTER (Indonesian Context) ---
         const formatSmartIDR = (n) => {
-            if (n >= 1000000000) {
-                // Shorten to Milyar (e.g. 1,52 M)
-                return 'Rp ' + (n / 1000000000).toLocaleString('id-ID', { maximumFractionDigits: 2 }) + ' M';
-            }
+            if (n >= 1000000000) return 'Rp ' + (n / 1000000000).toLocaleString('id-ID', { maximumFractionDigits: 2 }) + ' M';
             return 'Rp ' + new Intl.NumberFormat('id-ID').format(n);
         };
 
@@ -584,6 +701,7 @@
         els.startDate.value = firstDay.toISOString().split('T')[0];
         document.getElementById('uploadDate').value = today.toISOString().split('T')[0];
 
+        // --- STAGING FILTER ---
         function toggleStagingDropdown() { els.stagingDropdownMenu.classList.toggle('hidden'); }
         document.addEventListener('click', (e) => { if (!document.getElementById('stagingFilterContainer').contains(e.target)) els.stagingDropdownMenu.classList.add('hidden'); });
         els.stagingDropdownBtn.addEventListener('click', toggleStagingDropdown);
@@ -606,20 +724,52 @@
             const count = selectedStagings.size; els.stagingBtnText.innerText = selectedStagings.has('ALL') ? 'All Stagings' : `${count} Selected`;
         }
 
+        // --- COORDINATOR FILTER ---
+        function toggleCoordDropdown() { els.coordDropdownMenu.classList.toggle('hidden'); }
+        document.addEventListener('click', (e) => { if (!document.getElementById('coordFilterContainer').contains(e.target)) els.coordDropdownMenu.classList.add('hidden'); });
+        els.coordDropdownBtn.addEventListener('click', toggleCoordDropdown);
+
+        function updateCoordFilterUI(uniqueCoords) {
+            const c = els.coordDropdownMenu; c.innerHTML = '';
+            const addOpt = (val, lbl, chk) => {
+                const d = document.createElement('div'); d.className = 'p-2.5 hover:bg-slate-50 rounded-xl cursor-pointer flex items-center gap-3 transition-colors';
+                d.innerHTML = `<label class="flex items-center cursor-pointer w-full"><input type="checkbox" value="${val}" class="peer hidden" ${chk?'checked':''}><div class="w-5 h-5 border-2 border-slate-300 rounded-md peer-checked:bg-violet-600 peer-checked:border-violet-600 flex items-center justify-center transition-all text-white"><i class="fa-solid fa-check text-xs"></i></div><span class="ml-3 text-xs font-bold text-slate-600">${lbl}</span></label>`;
+                d.querySelector('input').onchange = (e) => {
+                    if(val==='ALL') { selectedCoordinators = e.target.checked ? new Set(['ALL']) : new Set(); c.querySelectorAll('input:not([value="ALL"])').forEach(el=>el.checked=false); }
+                    else { if(e.target.checked) { selectedCoordinators.add(val); selectedCoordinators.delete('ALL'); c.querySelector('input[value="ALL"]').checked=false; } else { selectedCoordinators.delete(val); if(selectedCoordinators.size===0) { selectedCoordinators.add('ALL'); c.querySelector('input[value="ALL"]').checked=true; }}}
+                    const count = selectedCoordinators.size;
+                    els.coordBtnText.innerText = selectedCoordinators.has('ALL') ? 'All Coordinators' : (count > 0 ? `${count} Selected` : 'Select');
+                };
+                c.appendChild(d);
+            };
+            addOpt('ALL', 'All Coordinators', selectedCoordinators.has('ALL'));
+            Array.from(uniqueCoords).sort().forEach(co => addOpt(co, co, selectedCoordinators.has(co)));
+            const count = selectedCoordinators.size; els.coordBtnText.innerText = selectedCoordinators.has('ALL') ? 'All Coordinators' : `${count} Selected`;
+        }
+
+
         window.switchPage = (p) => { 
             document.getElementById('pageDashboard').classList.toggle('hidden', p!=='dashboard'); 
             document.getElementById('pageActivity').classList.toggle('hidden', p!=='activity');
-            els.island.style.opacity='0'; // Reset island on page switch
+            document.getElementById('pageSettings').classList.toggle('hidden', p!=='settings');
+            
+            document.getElementById('nav-dashboard').classList.toggle('active', p==='dashboard');
+            document.getElementById('nav-activity').classList.toggle('active', p==='activity');
+            if(els.navSettings) els.navSettings.classList.toggle('active', p==='settings');
+            
+            els.island.style.opacity='0';
             if(p==='dashboard') loadDashboardData();
+            if(p==='settings') renderSettings();
         };
         window.setTrendMode = (m) => { currentTrendMode=m; updateTrendChart(displayTransactions); };
 
         signInAnonymously(auth).catch(console.error);
-        onAuthStateChanged(auth, (u) => { currentUser=u; if(!u) signInAnonymously(auth); updateUI(); loadDashboardData(); });
+        onAuthStateChanged(auth, (u) => { currentUser=u; if(!u) signInAnonymously(auth); updateUI(); loadDashboardData(); loadCoordinators(); });
 
         function updateUI() {
             els.btnLogin.classList.toggle('hidden', isAdmin); els.btnLogout.classList.toggle('hidden', !isAdmin);
             els.userInfo.classList.toggle('hidden', !isAdmin); els.btnOpenUpload.classList.toggle('hidden', !isAdmin);
+            if(els.navSettings) els.navSettings.classList.toggle('hidden', !isAdmin);
             renderActivityTable();
         }
 
@@ -627,36 +777,86 @@
         els.btnLogin.onclick = () => { document.getElementById('loginPass').value=''; document.getElementById('loginError').classList.add('hidden'); els.loginModal.classList.remove('hidden'); };
         document.getElementById('btnCancelLogin').onclick = () => els.loginModal.classList.add('hidden');
         document.getElementById('loginForm').onsubmit = (e) => { e.preventDefault(); if(document.getElementById('loginPass').value==='Admin123') { isAdmin=true; updateUI(); els.loginModal.classList.add('hidden'); setIsland('success', 'Access Granted'); } else document.getElementById('loginError').classList.remove('hidden'); };
-        els.btnLogout.onclick = () => { isAdmin=false; updateUI(); setIsland('success', 'Logged Out'); };
+        els.btnLogout.onclick = () => { isAdmin=false; updateUI(); setIsland('success', 'Logged Out'); window.switchPage('dashboard'); };
+
+        // --- COORDINATOR LOGIC ---
+        function loadCoordinators() {
+            const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'coordinators'));
+            onSnapshot(q, (snap) => {
+                coordinatorsMap = {};
+                snap.forEach(d => { coordinatorsMap[d.id] = d.data().name; });
+                if(!document.getElementById('pageSettings').classList.contains('hidden')) renderSettings();
+                if(!document.getElementById('pageDashboard').classList.contains('hidden')) loadDashboardData(); // Refresh to apply coordinator mapping
+            });
+        }
+
+        window.saveCoordinator = async (staging, nameInputId) => {
+            const name = document.getElementById(nameInputId).value;
+            if(!name.trim()) return;
+            try {
+                await setDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'coordinators', staging), { name: name, updatedAt: new Date() });
+                setIsland('success', 'Coordinator Saved');
+            } catch(e) { console.error(e); setIsland('error', 'Save Failed'); }
+        };
+
+        function renderSettings() {
+            const stagingSet = new Set(Object.keys(coordinatorsMap));
+            rawTransactions.forEach(t => { if(t.staging !== 'Unassigned') stagingSet.add(t.staging); });
+            const stagings = Array.from(stagingSet).sort();
+
+            const tbody = els.coordinatorsTableBody;
+            tbody.innerHTML = '';
+            
+            stagings.forEach(stg => {
+                const coordName = coordinatorsMap[stg] || '';
+                const inputId = `coord-input-${stg.replace(/\s+/g, '_')}`;
+                tbody.innerHTML += `
+                    <tr class="hover:bg-white/60 border-b border-slate-50 last:border-0 group">
+                        <td class="px-6 py-4 font-bold text-slate-700">${stg}</td>
+                        <td class="px-6 py-4">
+                            <input type="text" id="${inputId}" value="${coordName}" placeholder="Enter Name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-100 outline-none transition-all">
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="saveCoordinator('${stg}', '${inputId}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-md active:scale-95">Save</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
 
         let unsubscribe = null;
         window.loadDashboardData = () => {
             if(unsubscribe) unsubscribe();
             const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'transactions'), where("date", ">=", els.startDate.value), where("date", "<=", els.endDate.value));
             unsubscribe = onSnapshot(q, (snap) => {
-                let items=[], uploads=[], stgs=new Set();
+                let items=[], uploads=[], stgs=new Set(), coords=new Set();
                 snap.forEach(d => {
                     const dt = d.data();
                     uploads.push({id:d.id, date:dt.date, cat:dt.category, time:dt.uploadedAt?.toDate().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})||'-', name:dt.fileName});
                     dt.items.forEach(i => {
                         const s = (i.staging && i.staging!=='Unassigned') ? i.staging.trim() : 'Unassigned';
                         stgs.add(s);
-                        items.push({...i, category:dt.category, date:dt.date, staging:s});
+                        // Map coordinator
+                        const coord = coordinatorsMap[s] || 'Unassigned';
+                        coords.add(coord);
+                        
+                        items.push({...i, category:dt.category, date:dt.date, staging:s, coordinator: coord});
                     });
                 });
                 rawTransactions = items; allUploads = uploads;
                 updateStagingFilterUI(stgs);
+                updateCoordFilterUI(coords);
                 renderDashboard(); renderActivityTable();
             });
         };
 
         function renderDashboard() {
             const term = els.searchTable.value.toLowerCase();
-            displayTransactions = rawTransactions.filter(i => (selectedStagings.has('ALL') || selectedStagings.has(i.staging)) && (term==='' || i.awb.toLowerCase().includes(term) || i.name.toLowerCase().includes(term)));
+            displayTransactions = rawTransactions.filter(i => (selectedStagings.has('ALL') || selectedStagings.has(i.staging)) && (selectedCoordinators.has('ALL') || selectedCoordinators.has(i.coordinator)) && (term==='' || i.awb.toLowerCase().includes(term) || i.name.toLowerCase().includes(term)));
             let t = {satria:0, transferred:0, pending:0};
             displayTransactions.forEach(i => { if(t[i.category]!==undefined) t[i.category]+=i.amount; });
             
-            // UPDATE KPI WITH SMART FORMATTER
             els.valTotalAWB.innerText = new Intl.NumberFormat('id-ID').format(displayTransactions.length);
             els.valTotalAmount.innerText = formatSmartIDR(t.satria + t.transferred + t.pending);
             els.valSatria.innerText = formatSmartIDR(t.satria);
@@ -671,33 +871,13 @@
         function updateCharts(t) {
             // Trend
             const ctxT = document.getElementById('trendChart').getContext('2d'); if(trendChart) trendChart.destroy();
-            const agg={}; displayTransactions.forEach(i => { const k = currentTrendMode==='daily'?i.date:i.date.substring(0,7); agg[k]=(agg[k]||0)+i.amount; });
-            const keys = Object.keys(agg).sort();
+            const aggregated={}; displayTransactions.forEach(i => { const k = currentTrendMode==='daily'?i.date:i.date.substring(0,7); aggregated[k]=(aggregated[k]||0)+i.amount; });
+            const keys = Object.keys(aggregated).sort();
             const grad = ctxT.createLinearGradient(0,0,0,300); grad.addColorStop(0,'rgba(99,102,241,0.4)'); grad.addColorStop(1,'rgba(99,102,241,0)');
             trendChart = new Chart(ctxT, {
                 type: 'line', plugins: [ChartDataLabels],
-                data: { labels: keys.map(k=>currentTrendMode==='daily'?k.split('-').slice(1).reverse().join('/'):new Date(k+'-01').toLocaleDateString('en',{month:'short',year:'2-digit'})), datasets: [{ data: keys.map(k=>agg[k]), borderColor: '#6366f1', backgroundColor: grad, fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6 }] },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    layout: { padding: { top: 25 } },
-                    plugins: { 
-                        legend: {display: false}, 
-                        datalabels: { 
-                            display: true,
-                            align: 'top',
-                            anchor: 'end',
-                            formatter: (val) => formatSmartIDR(val),
-                            font: { size: 9, weight: 'bold' },
-                            color: '#4b5563',
-                            offset: 4,
-                            backgroundColor: 'rgba(255,255,255,0.8)',
-                            borderRadius: 4
-                        },
-                        tooltip: { mode: 'index', intersect: false, callbacks: { label: c => formatSmartIDR(c.raw) } } 
-                    }, 
-                    scales: { x: { grid: {display: false} }, y: { display: false } } 
-                }
+                data: { labels: keys.map(k=>currentTrendMode==='daily'?k.split('-').slice(1).reverse().join('/'):new Date(k+'-01').toLocaleDateString('en',{month:'short',year:'2-digit'})), datasets: [{ data: keys.map(k=>aggregated[k]), borderColor: '#6366f1', backgroundColor: grad, fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false}, datalabels: { display: false }, tooltip: { mode: 'index', intersect: false, callbacks: { label: c => formatSmartIDR(c.raw) } } }, scales: { x: { grid: {display: false} }, y: { display: false } } }
             });
 
             // Donut
@@ -711,28 +891,7 @@
             const sSort = Object.entries(sAgg).sort((a,b)=>b[1]-a[1]);
             const sGrad = ctxS.createLinearGradient(0,0,400,0); sGrad.addColorStop(0,'#818cf8'); sGrad.addColorStop(1,'#4f46e5');
             document.getElementById('stagingChartWrapper').style.height = Math.max(400, sSort.length*40)+'px';
-            stagingChart = new Chart(ctxS, { 
-                type: 'bar', 
-                plugins: [ChartDataLabels], 
-                data: { labels: sSort.map(e=>e[0]), datasets: [{ data: sSort.map(e=>e[1]), backgroundColor: sGrad, borderRadius: 6, barPercentage: 0.6 }] }, 
-                options: { 
-                    indexAxis: 'y', 
-                    maintainAspectRatio: false, 
-                    layout: { padding: { right: 60 } },
-                    plugins: { 
-                        legend: {display: false}, 
-                        datalabels: { 
-                            display: true,
-                            anchor: 'end', 
-                            align: 'end', 
-                            formatter: v=>formatSmartIDR(v), 
-                            font: {weight:'bold', size:10}, 
-                            color: '#64748b' 
-                        } 
-                    }, 
-                    scales: { x: {display: false}, y: {grid: {display:false}, ticks: {font:{size:11, weight:'600'}, color: '#475569'}} } 
-                } 
-            });
+            stagingChart = new Chart(ctxS, { type: 'bar', plugins: [ChartDataLabels], data: { labels: sSort.map(e=>e[0]), datasets: [{ data: sSort.map(e=>e[1]), backgroundColor: sGrad, borderRadius: 6, barPercentage: 0.6 }] }, options: { indexAxis: 'y', maintainAspectRatio: false, plugins: { legend: {display: false}, datalabels: { anchor: 'end', align: 'end', formatter: v=>formatSmartIDR(v), font: {weight:'bold', size:10}, color: '#64748b' } }, scales: { x: {display: false}, y: {grid: {display:false}, ticks: {font:{size:11, weight:'600'}, color: '#475569'}} } } });
         }
 
         // --- NEW: Separate function for Trend Chart Update (Fixed Error) ---
@@ -744,28 +903,22 @@
             data.forEach(item => {
                 let key;
                 if (currentTrendMode === 'daily') {
-                    // YYYY-MM-DD
                     key = item.date; 
                 } else {
-                    // YYYY-MM
                     key = item.date.substring(0, 7); 
                 }
                 if (!aggregated[key]) aggregated[key] = 0;
                 aggregated[key] += item.amount;
             });
 
-            // Sort keys
-            const sortedKeys = Object.keys(aggregated).sort();
-            const values = sortedKeys.map(k => aggregated[k]);
+            const keys = Object.keys(aggregated).sort();
+            const values = keys.map(k => aggregated[k]);
             
-            // Format Labels
-            const labels = sortedKeys.map(k => {
+            const labels = keys.map(k => {
                 if(currentTrendMode === 'daily') {
-                    // DD/MM
                     const parts = k.split('-');
                     return `${parts[2]}/${parts[1]}`;
                 } else {
-                    // Month YY
                     const date = new Date(k + '-01');
                     return date.toLocaleDateString('id-ID', { month: 'short', year: '2-digit' });
                 }
@@ -786,27 +939,16 @@
                         backgroundColor: grad, 
                         fill: true, 
                         tension: 0.4, 
-                        pointRadius: 4, 
+                        pointRadius: 3, 
                         pointHoverRadius: 6 
                     }] 
                 },
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false, 
-                    layout: { padding: { top: 35, left: 10, right: 10 } },
                     plugins: { 
                         legend: {display: false}, 
-                        datalabels: { 
-                            display: true,
-                            align: 'top',
-                            anchor: 'end',
-                            formatter: (val) => formatSmartIDR(val),
-                            font: { size: 10, weight: 'bold', family: "'Plus Jakarta Sans', sans-serif" }, 
-                            color: '#4b5563',
-                            offset: 4,
-                            backgroundColor: 'rgba(255,255,255,0.8)',
-                            borderRadius: 4
-                        }, 
+                        datalabels: { display: false }, 
                         tooltip: { 
                             mode: 'index', 
                             intersect: false, 
@@ -815,26 +957,33 @@
                     }, 
                     scales: { 
                         x: { grid: {display: false} }, 
-                        y: { display: false, grace: '10%' } 
+                        y: { display: false } 
                     } 
                 }
             });
         }
 
         function renderTables() {
-            // 1. Top Couriers (Leaderboard)
+            // 1. Top Couriers
             const cAgg={}; displayTransactions.forEach(i=>cAgg[i.name]=(cAgg[i.name]||0)+i.amount);
             const cSort = Object.entries(cAgg).sort((a,b)=>b[1]-a[1]).slice(0,10);
             els.topCouriersList.innerHTML = cSort.map(([n,v],i) => `<div class="flex justify-between items-center p-3 bg-white/60 rounded-xl border border-slate-100 mb-2"><div class="flex items-center gap-3 overflow-hidden"><div class="w-6 h-6 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs font-bold">${i+1}</div><span class="text-xs font-bold text-slate-700 truncate">${n}</span></div><span class="text-xs font-bold text-indigo-600">${formatSmartIDR(v)}</span></div>`).join('') || '<div class="text-center py-10 text-slate-400 text-xs">No Data</div>';
 
-            // 2. NEW: HUB Performance Table (With Safety Check)
+            // 2. HUB Table
             const hAgg={}; displayTransactions.forEach(i=>{ const h=i.hub||'-'; if(!hAgg[h]) hAgg[h]={cnt:0,amt:0}; hAgg[h].cnt++; hAgg[h].amt+=i.amount; });
             const hSort = Object.entries(hAgg).sort((a,b)=>b[1].amt - a[1].amt);
             if(els.hubTableBody) {
                 els.hubTableBody.innerHTML = hSort.map(([h,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-bold text-xs text-slate-700">${h}</td><td class="px-6 py-4 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-6 py-4 text-right text-xs font-black text-emerald-600">${formatSmartIDR(d.amt)}</td><td class="px-6 py-4 text-center"><button class="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold py-1.5 px-3 rounded-lg text-[10px] transition-colors" onclick="window.openHubBreakdown('${h}')">Lihat Detail</button></td></tr>`).join('') || '<tr><td colspan="4" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
             }
 
-            // 3. NEW: Pending Satria Table (With Safety Check)
+            // 3. Coordinator Table (NEW)
+            const coAgg={}; displayTransactions.forEach(i=>{ const c=i.coordinator||'Unassigned'; if(!coAgg[c]) coAgg[c]={cnt:0,amt:0}; coAgg[c].cnt++; coAgg[c].amt+=i.amount; });
+            const coSort = Object.entries(coAgg).sort((a,b)=>b[1].amt - a[1].amt);
+            if(els.coordTableBody) {
+                els.coordTableBody.innerHTML = coSort.map(([c,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-bold text-xs text-slate-700 truncate max-w-[120px]">${c}</td><td class="px-6 py-4 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-6 py-4 text-right text-xs font-black text-violet-600">${formatSmartIDR(d.amt)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
+            }
+
+            // 4. Pending Satria Table
             const pendingData = displayTransactions.filter(i => i.category !== 'transferred');
             const pAgg={}; pendingData.forEach(i=>{ if(!pAgg[i.name]) pAgg[i.name]={stg:i.staging, cat:i.category, amt:0}; pAgg[i.name].amt+=i.amount; });
             const pSort = Object.entries(pAgg).sort((a,b)=>b[1].amt - a[1].amt);
@@ -845,7 +994,7 @@
                 }).join('') || '<tr><td colspan="4" class="text-center py-8 text-emerald-500 text-xs font-bold"><i class="fa-solid fa-check-circle mr-2"></i>All Clean!</td></tr>';
             }
 
-            // 4. Main Transactions Table
+            // 5. Main Transactions Table
             displayTransactions.sort((a,b)=>b.amount-a.amount);
             const start = (currentPage-1)*itemsPerPage; const pageData = displayTransactions.slice(start, start+itemsPerPage);
             if(pageData.length===0) els.tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-10 text-slate-400">No Data</td></tr>';
