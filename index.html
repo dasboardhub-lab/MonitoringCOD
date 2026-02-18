@@ -8,7 +8,8 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
+        // DEFINISI KONFIGURASI
+        const customConfig = {
             theme: {
                 extend: {
                     fontFamily: {
@@ -46,6 +47,17 @@
                     }
                 }
             }
+        };
+
+        // SAFETY CHECK: Terapkan konfigurasi hanya jika/ketika tailwind sudah dimuat
+        if (typeof tailwind !== 'undefined') {
+            tailwind.config = customConfig;
+        } else {
+            window.addEventListener('load', function() {
+                if (typeof tailwind !== 'undefined') {
+                    tailwind.config = customConfig;
+                }
+            });
         }
     </script>
     
@@ -442,7 +454,9 @@
                                         <tr>
                                             <th class="px-6 py-4 first:rounded-l-xl">Satria</th>
                                             <th class="px-6 py-4 text-center">Status</th>
-                                            <th class="px-6 py-4 text-right last:rounded-r-xl">Pending</th>
+                                            <th class="px-6 py-4">Note</th> <!-- Kolom Note Baru -->
+                                            <th class="px-6 py-4 text-right">Pending</th>
+                                            <th class="px-6 py-4 text-center last:rounded-r-xl">Action</th> <!-- Kolom Action Baru -->
                                         </tr>
                                     </thead>
                                     <tbody id="pendingSatriaTableBody" class="divide-y divide-transparent">
@@ -569,6 +583,19 @@
     </main>
 
     <!-- MODALS -->
+    <!-- Note Modal (New) -->
+    <div id="noteModal" class="fixed inset-0 bg-slate-900/60 z-[95] hidden flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-sm p-8 shadow-2xl transform scale-100 transition-all border border-white/60">
+            <h3 class="text-xl font-black text-slate-900 mb-4">Edit Note</h3>
+            <p class="text-sm text-slate-500 mb-4 font-bold" id="noteModalName">Courier Name</p>
+            <textarea id="noteInput" rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-sm focus:ring-4 focus:ring-indigo-100 outline-none transition-all resize-none" placeholder="Enter note..."></textarea>
+            <div class="flex gap-3 mt-6">
+                <button onclick="document.getElementById('noteModal').classList.add('hidden')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-2xl transition-all">Cancel</button>
+                <button onclick="saveNote()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-2xl shadow-lg hover:shadow-indigo-500/30 transition-all">Save</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Breakdown Modal -->
     <div id="hubBreakdownModal" class="fixed inset-0 bg-slate-900/60 z-[95] hidden flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300">
         <div class="bg-white rounded-[2.5rem] w-full max-w-2xl p-8 shadow-2xl transform scale-100 transition-all border border-white/60 flex flex-col max-h-[80vh]">
@@ -633,14 +660,27 @@
         import { getAuth, onAuthStateChanged, signOut, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = { apiKey: "AIzaSyCxYJjxiabLIXkSSEw9TjKWK1dRYUtb3YE", authDomain: "dailyreport-cfc8f.firebaseapp.com", projectId: "dailyreport-cfc8f", storageBucket: "dailyreport-cfc8f.firebasestorage.app", messagingSenderId: "963104518926", appId: "1:963104518926:web:a1d6eb1cf93834bf8c5d5f" };
+        // MENGEMBALIKAN KONFIGURASI LAMA
+        const firebaseConfig = { 
+            apiKey: "AIzaSyCxYJjxiabLIXkSSEw9TjKWK1dRYUtb3YE", 
+            authDomain: "dailyreport-cfc8f.firebaseapp.com", 
+            projectId: "dailyreport-cfc8f", 
+            storageBucket: "dailyreport-cfc8f.firebasestorage.app", 
+            messagingSenderId: "963104518926", 
+            appId: "1:963104518926:web:a1d6eb1cf93834bf8c5d5f" 
+        };
+        
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const APP_ID = "dailyreport-cfc8f"; 
+        
+        // MENGGUNAKAN APP ID SPESIFIK YANG LAMA
+        const appId = 'dailyreport-cfc8f';
 
         let currentUser = null, isAdmin = false, rawTransactions = [], displayTransactions = [], allUploads = [], donutChart = null, stagingChart = null, trendChart = null, currentTrendMode = 'daily', deleteTargetId = null, currentPage = 1, selectedStagings = new Set(['ALL']), selectedCoordinators = new Set(['ALL']);
-        let coordinatorsMap = {}; 
+        let coordinatorsMap = {};
+        let courierNotesMap = {}; // State untuk menyimpan catatan
+        let currentEditingCourier = null; // State untuk modal edit note 
         const itemsPerPage = 100;
 
         const els = { 
@@ -649,6 +689,7 @@
             uploadModal: document.getElementById('uploadModal'), 
             editModal: document.getElementById('editModal'), 
             deleteModal: document.getElementById('deleteModal'), 
+            noteModal: document.getElementById('noteModal'), // Modal Note
             startDate: document.getElementById('startDate'), 
             endDate: document.getElementById('endDate'), 
             stagingDropdownBtn: document.getElementById('stagingDropdownBtn'), 
@@ -702,7 +743,8 @@
 
         const today = new Date();
         els.endDate.value = today.toISOString().split('T')[0];
-        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+        // UPDATE: Set start date to Jan 1st of current year to catch more data by default
+        const firstDay = new Date(today.getFullYear(), 0, 1); 
         els.startDate.value = firstDay.toISOString().split('T')[0];
         document.getElementById('uploadDate').value = today.toISOString().split('T')[0];
 
@@ -768,8 +810,17 @@
         };
         window.setTrendMode = (m) => { currentTrendMode=m; updateTrendChart(displayTransactions); };
 
+        // REVERT AUTH: Menggunakan simple anonymous login karena project eksternal
         signInAnonymously(auth).catch(console.error);
-        onAuthStateChanged(auth, (u) => { currentUser=u; if(!u) signInAnonymously(auth); updateUI(); loadDashboardData(); loadCoordinators(); });
+
+        onAuthStateChanged(auth, (u) => { 
+            currentUser=u; 
+            if(u) {
+                updateUI(); loadDashboardData(); loadCoordinators(); loadNotes();
+            } else {
+                signInAnonymously(auth);
+            }
+        });
 
         function updateUI() {
             els.btnLogin.classList.toggle('hidden', isAdmin); els.btnLogout.classList.toggle('hidden', !isAdmin);
@@ -781,12 +832,30 @@
         // Login
         els.btnLogin.onclick = () => { document.getElementById('loginPass').value=''; document.getElementById('loginError').classList.add('hidden'); els.loginModal.classList.remove('hidden'); };
         document.getElementById('btnCancelLogin').onclick = () => els.loginModal.classList.add('hidden');
-        document.getElementById('loginForm').onsubmit = (e) => { e.preventDefault(); if(document.getElementById('loginPass').value==='Admin123') { isAdmin=true; updateUI(); els.loginModal.classList.add('hidden'); setIsland('success', 'Access Granted'); } else document.getElementById('loginError').classList.remove('hidden'); };
-        els.btnLogout.onclick = () => { isAdmin=false; updateUI(); setIsland('success', 'Logged Out'); window.switchPage('dashboard'); };
+        document.getElementById('loginForm').onsubmit = (e) => { 
+            e.preventDefault(); 
+            if(document.getElementById('loginPass').value==='Admin123') { 
+                isAdmin=true; 
+                updateUI(); 
+                renderDashboard(); // FORCE RE-RENDER AGAR TOMBOL EDIT MUNCUL
+                els.loginModal.classList.add('hidden'); 
+                setIsland('success', 'Access Granted'); 
+            } else {
+                document.getElementById('loginError').classList.remove('hidden'); 
+            }
+        };
+        els.btnLogout.onclick = () => { 
+            isAdmin=false; 
+            updateUI(); 
+            renderDashboard(); // FORCE RE-RENDER AGAR TOMBOL EDIT HILANG
+            setIsland('success', 'Logged Out'); 
+            window.switchPage('dashboard'); 
+        };
 
         // --- COORDINATOR LOGIC ---
         function loadCoordinators() {
-            const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'coordinators'));
+            if(!currentUser) return;
+            const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'coordinators'));
             onSnapshot(q, (snap) => {
                 coordinatorsMap = {};
                 snap.forEach(d => { coordinatorsMap[d.id] = d.data().name; });
@@ -795,11 +864,53 @@
             });
         }
 
+        // --- NOTE LOGIC (NEW) ---
+        function loadNotes() {
+            if(!currentUser) return;
+            const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'courier_notes'));
+            onSnapshot(q, (snap) => {
+                courierNotesMap = {};
+                snap.forEach(d => { courierNotesMap[d.id] = d.data().note; });
+                if(displayTransactions.length > 0) renderTables(); // Refresh table only if data exists
+            });
+        }
+
+        window.openNoteModal = (name) => {
+            currentEditingCourier = name;
+            document.getElementById('noteModalName').innerText = name;
+            // Sanitize name for ID lookups just in case, though we store raw name as ID currently
+            // Ideally sanitize slashes
+            const sanitizedId = name.replace(/\//g, '_');
+            document.getElementById('noteInput').value = courierNotesMap[sanitizedId] || '';
+            els.noteModal.classList.remove('hidden');
+        };
+
+        window.saveNote = async () => {
+            if(!currentEditingCourier) return;
+            const note = document.getElementById('noteInput').value;
+            const sanitizedId = currentEditingCourier.replace(/\//g, '_');
+            
+            els.noteModal.classList.add('hidden');
+            setIsland('loading', 'Saving Note...');
+            
+            try {
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'courier_notes', sanitizedId), { 
+                    note: note, 
+                    updatedAt: new Date(),
+                    updatedBy: 'Admin'
+                });
+                setIsland('success', 'Note Saved');
+            } catch(e) {
+                console.error(e);
+                setIsland('error', 'Save Failed');
+            }
+        };
+
         window.saveCoordinator = async (staging, nameInputId) => {
             const name = document.getElementById(nameInputId).value;
             if(!name.trim()) return;
             try {
-                await setDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'coordinators', staging), { name: name, updatedAt: new Date() });
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'coordinators', staging), { name: name, updatedAt: new Date() });
                 setIsland('success', 'Coordinator Saved');
             } catch(e) { console.error(e); setIsland('error', 'Save Failed'); }
         };
@@ -832,8 +943,9 @@
 
         let unsubscribe = null;
         window.loadDashboardData = () => {
+            if(!currentUser) return;
             if(unsubscribe) unsubscribe();
-            const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'transactions'), where("date", ">=", els.startDate.value), where("date", "<=", els.endDate.value));
+            const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), where("date", ">=", els.startDate.value), where("date", "<=", els.endDate.value));
             unsubscribe = onSnapshot(q, (snap) => {
                 let items=[], uploads=[], stgs=new Set(), coords=new Set();
                 snap.forEach(d => {
@@ -853,6 +965,9 @@
                 updateStagingFilterUI(stgs);
                 updateCoordFilterUI(coords);
                 renderDashboard(); renderActivityTable();
+            }, (error) => {
+                console.error("Firestore Error:", error);
+                // Don't show connection error immediately on page load to avoid flicker, but show if persistent
             });
         };
 
@@ -1083,21 +1198,37 @@
                 els.coordTableBody.innerHTML = coSort.map(([c,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-bold text-xs text-slate-700 truncate max-w-[120px]">${c}</td><td class="px-6 py-4 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-6 py-4 text-right text-xs font-black text-violet-600">${formatSmartIDR(d.amt)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
             }
 
-            // 4. Pending Satria Table
+            // 4. Pending Satria Table (UPDATED WITH NOTES)
             const pendingData = displayTransactions.filter(i => i.category !== 'transferred');
             const pAgg={}; pendingData.forEach(i=>{ if(!pAgg[i.name]) pAgg[i.name]={stg:i.staging, cat:i.category, amt:0}; pAgg[i.name].amt+=i.amount; });
             const pSort = Object.entries(pAgg).sort((a,b)=>b[1].amt - a[1].amt);
             if(els.pendingSatriaTableBody) {
                 els.pendingSatriaTableBody.innerHTML = pSort.map(([n,d]) => {
                     const badge = d.cat==='satria' ? '<span class="bg-blue-50 text-blue-600 px-2 py-1 rounded text-[10px] font-bold border border-blue-100">CASH IN</span>' : '<span class="bg-orange-50 text-orange-600 px-2 py-1 rounded text-[10px] font-bold border border-orange-100">PENDING</span>';
-                    return `<tr class="hover:bg-red-50/30 border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-bold text-xs text-slate-700 truncate max-w-[150px]">${n}</td><td class="px-6 py-4 text-xs text-slate-500">${d.stg}</td><td class="px-6 py-4 text-center">${badge}</td><td class="px-6 py-4 text-right text-xs font-black text-red-500">${formatSmartIDR(d.amt)}</td></tr>`;
-                }).join('') || '<tr><td colspan="4" class="text-center py-8 text-emerald-500 text-xs font-bold"><i class="fa-solid fa-check-circle mr-2"></i>All Clean!</td></tr>';
+                    
+                    // Fetch note safely with fallback
+                    const sanitizedId = n.replace(/\//g, '_');
+                    const note = courierNotesMap[sanitizedId] || '';
+                    const displayNote = note ? `<span class="text-xs text-slate-600 italic bg-yellow-50 px-2 py-1 rounded border border-yellow-100 max-w-[150px] block truncate" title="${note}">${note}</span>` : '<span class="text-[10px] text-slate-300">-</span>';
+                    
+                    // Edit Button only for Admins - Safe for names with quotes
+                    // We use data-name attribute to avoid inline escaping issues
+                    const editBtn = isAdmin ? `<button onclick="window.openNoteModal(this.dataset.name)" data-name="${n.replace(/"/g, '&quot;')}" class="bg-slate-100 hover:bg-indigo-100 text-slate-400 hover:text-indigo-600 p-1.5 rounded-lg transition-all" title="Edit Note"><i class="fa-solid fa-pen-to-square text-xs"></i></button>` : '';
+
+                    return `<tr class="hover:bg-red-50/30 border-b border-slate-50 last:border-0">
+                        <td class="px-6 py-4 font-bold text-xs text-slate-700 truncate max-w-[150px]">${n}</td>
+                        <td class="px-6 py-4 text-center">${badge}</td>
+                        <td class="px-6 py-4">${displayNote}</td>
+                        <td class="px-6 py-4 text-right text-xs font-black text-red-500">${formatSmartIDR(d.amt)}</td>
+                        <td class="px-6 py-4 text-center">${editBtn}</td>
+                    </tr>`;
+                }).join('') || '<tr><td colspan="5" class="text-center py-8 text-emerald-500 text-xs font-bold"><i class="fa-solid fa-check-circle mr-2"></i>All Clean!</td></tr>';
             }
 
             // 5. Main Transactions Table
             displayTransactions.sort((a,b)=>b.amount-a.amount);
             const start = (currentPage-1)*itemsPerPage; const pageData = displayTransactions.slice(start, start+itemsPerPage);
-            if(pageData.length===0) els.tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-10 text-slate-400">No Data</td></tr>';
+            if(pageData.length===0) els.tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-10 text-slate-400 font-medium">No Data Found<br><span class="text-xs text-indigo-500 cursor-pointer hover:underline" onclick="document.getElementById(\'startDate\').focus()">Check Date Filter</span></td></tr>';
             else els.tableBody.innerHTML = pageData.map(i => `<tr class="hover:bg-white/60 transition-colors border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-mono text-xs font-bold text-slate-600">${i.awb}</td><td class="px-6 py-4 text-xs font-bold text-slate-700 truncate max-w-xs">${i.name}</td><td class="px-6 py-4 text-xs text-slate-500">${i.staging}</td><td class="px-6 py-4 text-xs text-slate-500">${i.hub||'-'}</td><td class="px-6 py-4"><span class="px-2 py-1 rounded text-[10px] font-bold uppercase ${i.category==='satria'?'bg-blue-100 text-blue-700':(i.category==='transferred'?'bg-emerald-100 text-emerald-700':'bg-orange-100 text-orange-700')}">${i.category}</span></td><td class="px-6 py-4 text-right text-xs font-bold text-slate-800">${formatSmartIDR(i.amount)}</td></tr>`).join('');
             
             els.showingText.innerText = `Showing ${start+1}-${Math.min(start+itemsPerPage, displayTransactions.length)} of ${displayTransactions.length}`;
@@ -1197,7 +1328,8 @@
         document.getElementById('csvFile').onchange = (e) => document.getElementById('fileNameDisplay').innerText = e.target.files[0]?.name || "Choose File";
 
         async function getExistingAWBs() {
-            const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'transactions'));
+            if (!currentUser) return new Set();
+            const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'));
             const snap = await getDocs(q); const s = new Set();
             snap.forEach(d => d.data().items?.forEach(i => s.add(i.awb))); return s;
         }
@@ -1231,13 +1363,14 @@
 
         document.getElementById('uploadForm').onsubmit = async (e) => {
             e.preventDefault(); const file = document.getElementById('csvFile').files[0]; if(!file) return;
+            if(!currentUser) { setIsland('error', 'Not Authenticated'); return; }
             els.uploadModal.classList.add('hidden'); setIsland('loading', 'Checking Global Duplicates...');
             try {
                 const existing = await getExistingAWBs();
                 const data = parseCSV(await file.text());
                 const unique = data.filter(i => !existing.has(i.awb));
                 if(unique.length===0) { setIsland('error', 'All Data Exists!'); return; }
-                await addDoc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'transactions'), {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), {
                     date: document.getElementById('uploadDate').value,
                     category: document.querySelector('input[name="category"]:checked').value,
                     items: unique,
@@ -1254,8 +1387,9 @@
         window.openDeleteModal = (id) => { deleteTargetId = id; els.deleteModal.classList.remove('hidden'); };
         document.getElementById('btnCancelDelete').onclick = () => els.deleteModal.classList.add('hidden');
         document.getElementById('btnConfirmDelete').onclick = async () => {
+            if(!currentUser) return;
             els.deleteModal.classList.add('hidden'); setIsland('loading', 'Deleting...');
-            await deleteDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'transactions', deleteTargetId));
+            await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'transactions', deleteTargetId));
             setIsland('success', 'Deleted');
         };
 
@@ -1269,8 +1403,9 @@
         document.getElementById('editForm').onsubmit = async (e) => {
             e.preventDefault(); const id = document.getElementById('editDocId').value;
             const cat = document.querySelector('input[name="editCategory"]:checked').value;
+            if(!currentUser) return;
             document.getElementById('editModal').classList.add('hidden'); setIsland('loading', 'Updating...');
-            try { await updateDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'transactions', id), { category: cat }); setIsland('success', 'Updated'); } 
+            try { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'transactions', id), { category: cat }); setIsland('success', 'Updated'); } 
             catch(e) { setIsland('error', 'Failed'); }
         };
     </script>
