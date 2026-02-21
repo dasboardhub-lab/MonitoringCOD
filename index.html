@@ -482,7 +482,7 @@
                                     <thead class="text-[10px] text-slate-500 font-bold uppercase bg-slate-50/90 sticky top-0 z-10 backdrop-blur-sm shadow-sm">
                                         <tr>
                                             <th class="px-4 py-3 first:rounded-l-xl">AWB & Satria</th>
-                                            <th class="px-4 py-3 text-right whitespace-nowrap">Amount</th>
+                                            <th class="px-4 py-3 text-right whitespace-nowrap min-w-[100px]">Amount</th>
                                             <th class="px-4 py-3 w-full">Note</th>
                                             <th class="px-4 py-3 text-center w-10 last:rounded-r-xl">Act</th>
                                         </tr>
@@ -1228,7 +1228,7 @@
                 els.coordTableBody.innerHTML = coSort.map(([c,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-4 py-3 font-bold text-[11px] text-slate-700 whitespace-normal break-words">${c}</td><td class="px-3 py-3 text-center text-[11px] font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-4 py-3 text-right text-[11px] font-black text-violet-600 whitespace-nowrap">${formatSmartIDR(d.amt)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
             }
 
-            // 4. Pending Satria Table (Summary) - UPDATED 3 COLUMNS
+            // 4. Pending Satria Table (Summary) - UPDATED GROUPING BY STAGING
             const pendingData = displayTransactions.filter(i => i.category !== 'transferred');
             const pAgg={}; 
             pendingData.forEach(i=>{ 
@@ -1237,25 +1237,62 @@
                 else if(i.category === 'pending') pAgg[i.name].amtPending += i.amount;
                 pAgg[i.name].amtTotal += i.amount;
             });
-            const pSort = Object.entries(pAgg).sort((a,b)=>b[1].amtTotal - a[1].amtTotal);
+
             if(els.pendingSatriaTableBody) {
-                els.pendingSatriaTableBody.innerHTML = pSort.map(([n,d]) => {
-                    return `<tr class="hover:bg-orange-50/30 border-b border-slate-50 last:border-0">
-                        <td class="px-3 py-3 align-top whitespace-normal break-words">
-                            <div class="font-bold text-[11px] text-slate-700 leading-tight">${n}</div>
-                            <div class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-building text-[8px]"></i> ${d.hub || '-'}</div>
-                        </td>
-                        <td class="px-2 py-3 text-right align-top whitespace-nowrap">
-                            <div class="text-[10px] font-bold text-blue-500">${formatSmartIDR(d.amtSatria)}</div>
-                        </td>
-                        <td class="px-2 py-3 text-right align-top whitespace-nowrap">
-                            <div class="text-[10px] font-bold text-orange-500">${formatSmartIDR(d.amtPending)}</div>
-                        </td>
-                        <td class="px-3 py-3 text-right align-top whitespace-nowrap">
-                            <div class="text-[11px] font-black text-slate-800">${formatSmartIDR(d.amtTotal)}</div>
-                        </td>
-                    </tr>`;
-                }).join('') || '<tr><td colspan="4" class="text-center py-8 text-emerald-500 text-xs font-bold"><i class="fa-solid fa-check-circle mr-2"></i>All Clean!</td></tr>';
+                // Kelompokkan hasil agregasi Satria berdasarkan Staging
+                const groupedSatria = {};
+                Object.entries(pAgg).forEach(([n, d]) => {
+                    const stg = d.stg || 'Unassigned';
+                    if(!groupedSatria[stg]) groupedSatria[stg] = { items: [], totalStgAmount: 0 };
+                    groupedSatria[stg].items.push({ name: n, ...d });
+                    groupedSatria[stg].totalStgAmount += d.amtTotal;
+                });
+
+                // Urutkan Staging dari total terbanyak
+                const sortedSatriaStagings = Object.entries(groupedSatria).sort((a, b) => b[1].totalStgAmount - a[1].totalStgAmount);
+                let htmlSatria = '';
+
+                if (sortedSatriaStagings.length === 0) {
+                    htmlSatria = '<tr><td colspan="4" class="text-center py-8 text-emerald-500 text-xs font-bold"><i class="fa-solid fa-check-circle mr-2"></i>All Clean!</td></tr>';
+                } else {
+                    sortedSatriaStagings.forEach(([stg, group]) => {
+                        // Header Grup Staging
+                        htmlSatria += `
+                            <tr class="bg-orange-50/80 border-y border-orange-100/50">
+                                <td colspan="4" class="px-3 py-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-[11px] font-black text-orange-700 uppercase tracking-wider"><i class="fa-solid fa-layer-group mr-1.5 opacity-70"></i> STAGING: ${stg}</span>
+                                        <span class="text-[11px] font-bold text-orange-600 bg-white/60 px-2 py-1 rounded-md shadow-sm">${group.items.length} Satria | ${formatSmartIDR(group.totalStgAmount)}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+
+                        // Daftar Satria diurutkan dari total terbanyak di dalam grup ini
+                        const sortedItems = group.items.sort((a, b) => b.amtTotal - a.amtTotal);
+                        
+                        sortedItems.forEach(d => {
+                            htmlSatria += `
+                                <tr class="hover:bg-orange-50/30 border-b border-slate-50 last:border-0">
+                                    <td class="px-3 py-3 align-top whitespace-normal break-words">
+                                        <div class="font-bold text-[11px] text-slate-700 leading-tight">${d.name}</div>
+                                        <div class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-building text-[8px]"></i> ${d.hub || '-'}</div>
+                                    </td>
+                                    <td class="px-2 py-3 text-right align-top whitespace-nowrap">
+                                        <div class="text-[10px] font-bold text-blue-500">${formatSmartIDR(d.amtSatria)}</div>
+                                    </td>
+                                    <td class="px-2 py-3 text-right align-top whitespace-nowrap">
+                                        <div class="text-[10px] font-bold text-orange-500">${formatSmartIDR(d.amtPending)}</div>
+                                    </td>
+                                    <td class="px-3 py-3 text-right align-top whitespace-nowrap">
+                                        <div class="text-[11px] font-black text-slate-800">${formatSmartIDR(d.amtTotal)}</div>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    });
+                }
+                els.pendingSatriaTableBody.innerHTML = htmlSatria;
             }
 
             // 4.5 Pending AWB Table (Details with Notes) - UPDATED GROUPING BY STAGING
@@ -1303,7 +1340,7 @@
                                     <div class="font-bold text-[11px] text-slate-700 font-mono">${i.awb}</div>
                                     <div class="text-[9px] font-bold text-slate-500 mt-0.5 uppercase leading-tight">${i.name}</div>
                                 </td>
-                                <td class="px-4 py-3 text-right align-top whitespace-nowrap">
+                                <td class="px-4 py-3 text-right align-top whitespace-nowrap min-w-[100px]">
                                     <div class="text-[11px] font-black text-red-500">${formatSmartIDR(i.amount)}</div>
                                     <div class="flex justify-end">${badge}</div>
                                 </td>
