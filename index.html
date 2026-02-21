@@ -384,8 +384,8 @@
                     </div>
 
                     <!-- MONITORING TABLES (COORDINATOR, HUB & PENDING SATRIA & PENDING AWB) -->
-                    <!-- Diubah dari lg:grid-cols-4 menjadi lg:grid-cols-5 untuk memberikan porsi lebar lebih -->
-                    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 animate-slide-up-fade delay-500">
+                    <!-- Layout Grid Diubah Menjadi 3 Kolom. Rincian AWB dibuat Full Width -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-slide-up-fade delay-500">
                         
                         <!-- Wrapper for Coordinator & HUB -->
                         <div class="flex flex-col gap-6 lg:col-span-1 h-[750px]">
@@ -403,7 +403,7 @@
                                             <tr>
                                                 <th class="px-6 py-4 first:rounded-l-xl">Coordinator</th>
                                                 <th class="px-6 py-4 text-center">AWB</th>
-                                                <th class="px-6 py-4 text-right last:rounded-r-xl min-w-[140px] whitespace-nowrap">Total Amount</th>
+                                                <th class="px-6 py-4 text-right last:rounded-r-xl min-w-[120px] whitespace-nowrap">Total Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody id="coordTableBody" class="divide-y divide-transparent">
@@ -427,7 +427,7 @@
                                             <tr>
                                                 <th class="px-6 py-4 first:rounded-l-xl">HUB Name</th>
                                                 <th class="px-6 py-4 text-center">AWB</th>
-                                                <th class="px-6 py-4 text-right last:rounded-r-xl min-w-[140px] whitespace-nowrap">Amount</th>
+                                                <th class="px-6 py-4 text-right last:rounded-r-xl min-w-[120px] whitespace-nowrap">Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody id="hubTableBody" class="divide-y divide-transparent">
@@ -439,7 +439,6 @@
                         </div>
 
                         <!-- Pending Satria Monitor (Summary) -->
-                        <!-- Diubah dari lg:col-span-1 menjadi lg:col-span-2 agar tabelnya melebar -->
                         <div class="glass-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[750px] lg:col-span-2 border-l-4 border-l-orange-400">
                             <div class="p-6 border-b border-slate-100 bg-orange-50/30 flex justify-between items-center">
                                 <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
@@ -464,8 +463,8 @@
                             </div>
                         </div>
 
-                        <!-- Pending AWB Monitor (Details) -->
-                        <div class="glass-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[750px] lg:col-span-2 border-l-4 border-l-red-500">
+                        <!-- Pending AWB Monitor (Details) - Dibuat full width (lg:col-span-3) -->
+                        <div class="glass-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[750px] lg:col-span-3 border-l-4 border-l-red-500">
                             <div class="p-6 border-b border-slate-100 bg-red-50/30 flex justify-between items-center">
                                 <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
                                     <span class="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center animate-pulse-slow"><i class="fa-solid fa-triangle-exclamation"></i></span>
@@ -1219,14 +1218,14 @@
             const hAgg={}; displayTransactions.forEach(i=>{ const h=i.hub||'-'; if(!hAgg[h]) hAgg[h]={cnt:0,amt:0}; hAgg[h].cnt++; hAgg[h].amt+=i.amount; });
             const hSort = Object.entries(hAgg).sort((a,b)=>b[1].amt - a[1].amt).slice(0, 7); // Dibatasi maksimal 7 baris
             if(els.hubTableBody) {
-                els.hubTableBody.innerHTML = hSort.map(([h,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-bold text-xs text-slate-700">${h}</td><td class="px-6 py-4 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-6 py-4 text-right text-xs font-black text-emerald-600 min-w-[140px] whitespace-nowrap">${formatSmartIDR(d.amt)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
+                els.hubTableBody.innerHTML = hSort.map(([h,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-bold text-xs text-slate-700">${h}</td><td class="px-6 py-4 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-6 py-4 text-right text-xs font-black text-emerald-600 min-w-[120px] whitespace-nowrap">${formatSmartIDR(d.amt)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
             }
 
             // 3. Coordinator Table (NEW)
             const coAgg={}; displayTransactions.forEach(i=>{ const c=i.coordinator||'Unassigned'; if(!coAgg[c]) coAgg[c]={cnt:0,amt:0}; coAgg[c].cnt++; coAgg[c].amt+=i.amount; });
             const coSort = Object.entries(coAgg).sort((a,b)=>b[1].amt - a[1].amt).slice(0, 3);
             if(els.coordTableBody) {
-                els.coordTableBody.innerHTML = coSort.map(([c,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-bold text-xs text-slate-700 truncate max-w-[120px]">${c}</td><td class="px-6 py-4 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-6 py-4 text-right text-xs font-black text-violet-600 min-w-[140px] whitespace-nowrap">${formatSmartIDR(d.amt)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
+                els.coordTableBody.innerHTML = coSort.map(([c,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-bold text-xs text-slate-700 truncate max-w-[120px]">${c}</td><td class="px-6 py-4 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-6 py-4 text-right text-xs font-black text-violet-600 min-w-[120px] whitespace-nowrap">${formatSmartIDR(d.amt)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
             }
 
             // 4. Pending Satria Table (Summary) - UPDATED 3 COLUMNS
