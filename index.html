@@ -386,57 +386,59 @@
                     <!-- MONITORING TABLES (COORDINATOR, HUB & PENDING SATRIA) -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-slide-up-fade delay-500">
                         
-                        <!-- Coordinator Performance (NEW) -->
-                        <div class="glass-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[500px]">
-                            <div class="p-6 border-b border-slate-100 bg-slate-50/50">
-                                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                    <span class="w-8 h-8 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-user-tie"></i></span>
-                                    Coordinator
-                                </h3>
+                        <!-- Wrapper for Coordinator & HUB -->
+                        <div class="flex flex-col gap-6 lg:col-span-1 h-[750px]">
+                            <!-- Coordinator Performance (NEW) -->
+                            <div class="glass-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[250px] flex-none">
+                                <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                                    <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                        <span class="w-8 h-8 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-user-tie"></i></span>
+                                        Coordinator
+                                    </h3>
+                                </div>
+                                <div class="overflow-auto flex-1 bg-white/40 custom-scroll">
+                                    <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-2">
+                                        <thead class="text-[10px] text-slate-500 font-bold uppercase bg-slate-50/90 sticky top-0 z-10 backdrop-blur-sm shadow-sm">
+                                            <tr>
+                                                <th class="px-6 py-4 first:rounded-l-xl">Coordinator</th>
+                                                <th class="px-6 py-4 text-center">AWB</th>
+                                                <th class="px-6 py-4 text-right last:rounded-r-xl min-w-[140px] whitespace-nowrap">Total Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="coordTableBody" class="divide-y divide-transparent">
+                                            <!-- JS Populated -->
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="overflow-auto flex-1 bg-white/40">
-                                <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-2">
-                                    <thead class="text-[10px] text-slate-500 font-bold uppercase bg-slate-50/90 sticky top-0 z-10 backdrop-blur-sm shadow-sm">
-                                        <tr>
-                                            <th class="px-6 py-4 first:rounded-l-xl">Coordinator</th>
-                                            <th class="px-6 py-4 text-center">AWB</th>
-                                            <th class="px-6 py-4 text-right last:rounded-r-xl">Total Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="coordTableBody" class="divide-y divide-transparent">
-                                        <!-- JS Populated -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
 
-                        <!-- HUB Performance -->
-                        <div class="glass-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[500px]">
-                            <div class="p-6 border-b border-slate-100 bg-slate-50/50">
-                                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                    <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-building"></i></span>
-                                    HUB Performance
-                                </h3>
-                            </div>
-                            <div class="overflow-auto flex-1 bg-white/40">
-                                <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-2">
-                                    <thead class="text-[10px] text-slate-500 font-bold uppercase bg-slate-50/90 sticky top-0 z-10 backdrop-blur-sm shadow-sm">
-                                        <tr>
-                                            <th class="px-6 py-4 first:rounded-l-xl">HUB Name</th>
-                                            <th class="px-6 py-4 text-center">AWB</th>
-                                            <th class="px-6 py-4 text-right">Amount</th>
-                                            <th class="px-6 py-4 text-center last:rounded-r-xl">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="hubTableBody" class="divide-y divide-transparent">
-                                        <!-- JS Populated -->
-                                    </tbody>
-                                </table>
+                            <!-- HUB Performance -->
+                            <div class="glass-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[476px] flex-none">
+                                <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                                    <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                        <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-building"></i></span>
+                                        HUB Performance
+                                    </h3>
+                                </div>
+                                <div class="overflow-auto flex-1 bg-white/40 custom-scroll">
+                                    <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-2">
+                                        <thead class="text-[10px] text-slate-500 font-bold uppercase bg-slate-50/90 sticky top-0 z-10 backdrop-blur-sm shadow-sm">
+                                            <tr>
+                                                <th class="px-6 py-4 first:rounded-l-xl">HUB Name</th>
+                                                <th class="px-6 py-4 text-center">AWB</th>
+                                                <th class="px-6 py-4 text-right last:rounded-r-xl min-w-[140px] whitespace-nowrap">Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="hubTableBody" class="divide-y divide-transparent">
+                                            <!-- JS Populated -->
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Pending Satria Monitor -->
-                        <div class="glass-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[500px] border-l-4 border-l-red-400">
+                        <div class="glass-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[750px] lg:col-span-2 border-l-4 border-l-red-400">
                             <div class="p-6 border-b border-slate-100 bg-red-50/30 flex justify-between items-center">
                                 <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
                                     <span class="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center animate-pulse-slow"><i class="fa-solid fa-triangle-exclamation"></i></span>
@@ -453,10 +455,9 @@
                                     <thead class="text-[10px] text-slate-500 font-bold uppercase bg-slate-50/90 sticky top-0 z-10 backdrop-blur-sm shadow-sm">
                                         <tr>
                                             <th class="px-6 py-4 first:rounded-l-xl">Satria</th>
-                                            <th class="px-6 py-4 text-center">Status</th>
-                                            <th class="px-6 py-4">Note</th> <!-- Kolom Note Baru -->
-                                            <th class="px-6 py-4 text-right">Pending</th>
-                                            <th class="px-6 py-4 text-center last:rounded-r-xl">Action</th> <!-- Kolom Action Baru -->
+                                            <th class="px-6 py-4 text-right min-w-[140px] whitespace-nowrap">Total Amount</th>
+                                            <th class="px-6 py-4 w-full min-w-[150px]">Note</th>
+                                            <th class="px-4 py-4 text-center w-10 last:rounded-r-xl">Act</th>
                                         </tr>
                                     </thead>
                                     <tbody id="pendingSatriaTableBody" class="divide-y divide-transparent">
@@ -468,7 +469,7 @@
                     </div>
 
                     <!-- DATA TABLES -->
-                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 animate-slide-up-fade delay-500">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-slide-up-fade delay-500">
                         <!-- Top 10 -->
                         <div class="glass-panel p-0 overflow-hidden lg:col-span-1 flex flex-col h-[600px] rounded-3xl">
                             <div class="p-6 border-b border-slate-100 bg-slate-50/50">
@@ -480,7 +481,7 @@
                         </div>
 
                         <!-- Main Table -->
-                        <div class="glass-panel p-0 overflow-hidden lg:col-span-3 flex flex-col h-[600px] rounded-3xl">
+                        <div class="glass-panel p-0 overflow-hidden lg:col-span-2 flex flex-col h-[600px] rounded-3xl">
                             <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center z-10">
                                 <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
                                     <span class="w-8 h-8 rounded-lg bg-slate-200 text-slate-600 flex items-center justify-center"><i class="fa-solid fa-table-list"></i></span>
@@ -499,7 +500,7 @@
                                             <th class="px-6 py-4 tracking-wider">Staging</th>
                                             <th class="px-6 py-4 tracking-wider">Hub</th>
                                             <th class="px-6 py-4 tracking-wider">Category</th>
-                                            <th class="px-6 py-4 tracking-wider text-right first:rounded-l-xl last:rounded-r-xl">Amount</th>
+                                            <th class="px-6 py-4 tracking-wider text-right first:rounded-l-xl last:rounded-r-xl min-w-[140px] whitespace-nowrap">Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tableBody" class="divide-y divide-transparent">
@@ -612,7 +613,7 @@
                         <tr>
                             <th class="px-4 py-3 rounded-l-lg">Staging</th>
                             <th class="px-4 py-3 text-center">AWB</th>
-                            <th class="px-4 py-3 text-right rounded-r-lg">Amount</th>
+                            <th class="px-4 py-3 text-right rounded-r-lg min-w-[140px] whitespace-nowrap">Amount</th>
                         </tr>
                     </thead>
                     <tbody id="breakdownTableBody" class="divide-y divide-transparent">
@@ -1186,16 +1187,16 @@
 
             // 2. HUB Table
             const hAgg={}; displayTransactions.forEach(i=>{ const h=i.hub||'-'; if(!hAgg[h]) hAgg[h]={cnt:0,amt:0}; hAgg[h].cnt++; hAgg[h].amt+=i.amount; });
-            const hSort = Object.entries(hAgg).sort((a,b)=>b[1].amt - a[1].amt);
+            const hSort = Object.entries(hAgg).sort((a,b)=>b[1].amt - a[1].amt).slice(0, 7); // Dibatasi maksimal 7 baris
             if(els.hubTableBody) {
-                els.hubTableBody.innerHTML = hSort.map(([h,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-bold text-xs text-slate-700">${h}</td><td class="px-6 py-4 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-6 py-4 text-right text-xs font-black text-emerald-600">${formatSmartIDR(d.amt)}</td><td class="px-6 py-4 text-center"><button class="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold py-1.5 px-3 rounded-lg text-[10px] transition-colors" onclick="window.openHubBreakdown('${h}')">Lihat Detail</button></td></tr>`).join('') || '<tr><td colspan="4" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
+                els.hubTableBody.innerHTML = hSort.map(([h,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-bold text-xs text-slate-700">${h}</td><td class="px-6 py-4 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-6 py-4 text-right text-xs font-black text-emerald-600 min-w-[140px] whitespace-nowrap">${formatSmartIDR(d.amt)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
             }
 
             // 3. Coordinator Table (NEW)
             const coAgg={}; displayTransactions.forEach(i=>{ const c=i.coordinator||'Unassigned'; if(!coAgg[c]) coAgg[c]={cnt:0,amt:0}; coAgg[c].cnt++; coAgg[c].amt+=i.amount; });
-            const coSort = Object.entries(coAgg).sort((a,b)=>b[1].amt - a[1].amt);
+            const coSort = Object.entries(coAgg).sort((a,b)=>b[1].amt - a[1].amt).slice(0, 3);
             if(els.coordTableBody) {
-                els.coordTableBody.innerHTML = coSort.map(([c,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-bold text-xs text-slate-700 truncate max-w-[120px]">${c}</td><td class="px-6 py-4 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-6 py-4 text-right text-xs font-black text-violet-600">${formatSmartIDR(d.amt)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
+                els.coordTableBody.innerHTML = coSort.map(([c,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-bold text-xs text-slate-700 truncate max-w-[120px]">${c}</td><td class="px-6 py-4 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-6 py-4 text-right text-xs font-black text-violet-600 min-w-[140px] whitespace-nowrap">${formatSmartIDR(d.amt)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
             }
 
             // 4. Pending Satria Table (UPDATED WITH NOTES)
@@ -1204,32 +1205,36 @@
             const pSort = Object.entries(pAgg).sort((a,b)=>b[1].amt - a[1].amt);
             if(els.pendingSatriaTableBody) {
                 els.pendingSatriaTableBody.innerHTML = pSort.map(([n,d]) => {
-                    const badge = d.cat==='satria' ? '<span class="bg-blue-50 text-blue-600 px-2 py-1 rounded text-[10px] font-bold border border-blue-100">CASH IN</span>' : '<span class="bg-orange-50 text-orange-600 px-2 py-1 rounded text-[10px] font-bold border border-orange-100">PENDING</span>';
+                    // Badge dikecilkan sedikit agar rapi saat diletakkan di bawah nominal
+                    const badge = d.cat==='satria' ? '<span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[9px] font-bold border border-blue-100 inline-block">CASH IN</span>' : '<span class="bg-orange-50 text-orange-600 px-2 py-0.5 rounded text-[9px] font-bold border border-orange-100 inline-block">PENDING</span>';
                     
                     // Fetch note safely with fallback
                     const sanitizedId = n.replace(/\//g, '_');
                     const note = courierNotesMap[sanitizedId] || '';
-                    const displayNote = note ? `<span class="text-xs text-slate-600 italic bg-yellow-50 px-2 py-1 rounded border border-yellow-100 max-w-[150px] block truncate" title="${note}">${note}</span>` : '<span class="text-[10px] text-slate-300">-</span>';
                     
-                    // Edit Button only for Admins - Safe for names with quotes
-                    // We use data-name attribute to avoid inline escaping issues
-                    const editBtn = isAdmin ? `<button onclick="window.openNoteModal(this.dataset.name)" data-name="${n.replace(/"/g, '&quot;')}" class="bg-slate-100 hover:bg-indigo-100 text-slate-400 hover:text-indigo-600 p-1.5 rounded-lg transition-all" title="Edit Note"><i class="fa-solid fa-pen-to-square text-xs"></i></button>` : '';
+                    // Note dibuat whitespace-normal dan break-words agar teks membungkus (wrap) ke bawah
+                    const displayNote = note ? `<span class="text-xs text-slate-600 italic bg-yellow-50 px-2.5 py-1.5 rounded-lg border border-yellow-100 w-full block whitespace-normal break-words leading-relaxed shadow-sm" title="${note}">${note}</span>` : '<span class="text-[10px] text-slate-300">-</span>';
+                    
+                    // Edit Button only for Admins
+                    const editBtn = isAdmin ? `<button onclick="window.openNoteModal(this.dataset.name)" data-name="${n.replace(/"/g, '&quot;')}" class="bg-slate-100 hover:bg-indigo-100 text-slate-400 hover:text-indigo-600 p-1.5 rounded-lg transition-all border border-slate-200 shadow-sm" title="Edit Note"><i class="fa-solid fa-pen-to-square text-[10px]"></i></button>` : '';
 
                     return `<tr class="hover:bg-red-50/30 border-b border-slate-50 last:border-0">
-                        <td class="px-6 py-4 font-bold text-xs text-slate-700 truncate max-w-[150px]">${n}</td>
-                        <td class="px-6 py-4 text-center">${badge}</td>
-                        <td class="px-6 py-4">${displayNote}</td>
-                        <td class="px-6 py-4 text-right text-xs font-black text-red-500">${formatSmartIDR(d.amt)}</td>
-                        <td class="px-6 py-4 text-center">${editBtn}</td>
+                        <td class="px-6 py-4 font-bold text-xs text-slate-700 truncate max-w-[130px]">${n}</td>
+                        <td class="px-6 py-4 text-right align-top min-w-[140px] whitespace-nowrap">
+                            <div class="text-xs font-black text-red-500 mb-1.5 mt-0.5">${formatSmartIDR(d.amt)}</div>
+                            <div class="flex justify-end">${badge}</div>
+                        </td>
+                        <td class="px-6 py-4 w-full min-w-[150px] align-top">${displayNote}</td>
+                        <td class="px-4 py-4 text-center w-10 align-top pt-5">${editBtn}</td>
                     </tr>`;
-                }).join('') || '<tr><td colspan="5" class="text-center py-8 text-emerald-500 text-xs font-bold"><i class="fa-solid fa-check-circle mr-2"></i>All Clean!</td></tr>';
+                }).join('') || '<tr><td colspan="4" class="text-center py-8 text-emerald-500 text-xs font-bold"><i class="fa-solid fa-check-circle mr-2"></i>All Clean!</td></tr>';
             }
 
             // 5. Main Transactions Table
             displayTransactions.sort((a,b)=>b.amount-a.amount);
             const start = (currentPage-1)*itemsPerPage; const pageData = displayTransactions.slice(start, start+itemsPerPage);
             if(pageData.length===0) els.tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-10 text-slate-400 font-medium">No Data Found<br><span class="text-xs text-indigo-500 cursor-pointer hover:underline" onclick="document.getElementById(\'startDate\').focus()">Check Date Filter</span></td></tr>';
-            else els.tableBody.innerHTML = pageData.map(i => `<tr class="hover:bg-white/60 transition-colors border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-mono text-xs font-bold text-slate-600">${i.awb}</td><td class="px-6 py-4 text-xs font-bold text-slate-700 truncate max-w-xs">${i.name}</td><td class="px-6 py-4 text-xs text-slate-500">${i.staging}</td><td class="px-6 py-4 text-xs text-slate-500">${i.hub||'-'}</td><td class="px-6 py-4"><span class="px-2 py-1 rounded text-[10px] font-bold uppercase ${i.category==='satria'?'bg-blue-100 text-blue-700':(i.category==='transferred'?'bg-emerald-100 text-emerald-700':'bg-orange-100 text-orange-700')}">${i.category}</span></td><td class="px-6 py-4 text-right text-xs font-bold text-slate-800">${formatSmartIDR(i.amount)}</td></tr>`).join('');
+            else els.tableBody.innerHTML = pageData.map(i => `<tr class="hover:bg-white/60 transition-colors border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-mono text-xs font-bold text-slate-600">${i.awb}</td><td class="px-6 py-4 text-xs font-bold text-slate-700 truncate max-w-xs">${i.name}</td><td class="px-6 py-4 text-xs text-slate-500">${i.staging}</td><td class="px-6 py-4 text-xs text-slate-500">${i.hub||'-'}</td><td class="px-6 py-4"><span class="px-2 py-1 rounded text-[10px] font-bold uppercase ${i.category==='satria'?'bg-blue-100 text-blue-700':(i.category==='transferred'?'bg-emerald-100 text-emerald-700':'bg-orange-100 text-orange-700')}">${i.category}</span></td><td class="px-6 py-4 text-right text-xs font-bold text-slate-800 min-w-[140px] whitespace-nowrap">${formatSmartIDR(i.amount)}</td></tr>`).join('');
             
             els.showingText.innerText = `Showing ${start+1}-${Math.min(start+itemsPerPage, displayTransactions.length)} of ${displayTransactions.length}`;
             els.pageInfo.innerText = currentPage;
@@ -1264,7 +1269,7 @@
                 <tr class="hover:bg-slate-50 border-b border-slate-50 last:border-0">
                     <td class="px-4 py-3 text-xs font-bold text-slate-700">${stg}</td>
                     <td class="px-4 py-3 text-center text-xs font-medium text-slate-500">${d.cnt}</td>
-                    <td class="px-4 py-3 text-right text-xs font-black text-emerald-600">${formatSmartIDR(d.amt)}</td>
+                    <td class="px-4 py-3 text-right text-xs font-black text-emerald-600 min-w-[140px] whitespace-nowrap">${formatSmartIDR(d.amt)}</td>
                 </tr>
             `).join('') || '<tr><td colspan="3" class="text-center py-4 text-slate-400 text-xs">No Data</td></tr>';
             
