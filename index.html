@@ -384,8 +384,8 @@
                     </div>
 
                     <!-- MONITORING TABLES (COORDINATOR, HUB & PENDING SATRIA & PENDING AWB) -->
-                    <!-- Layout Grid Diubah Menjadi 3 Kolom. Rincian AWB dibuat Full Width -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-slide-up-fade delay-500">
+                    <!-- Layout Grid Diubah Menjadi 4 Kolom. -->
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 animate-slide-up-fade delay-500">
                         
                         <!-- Wrapper for Coordinator & HUB -->
                         <div class="flex flex-col gap-6 lg:col-span-1 h-[750px]">
@@ -398,12 +398,12 @@
                                     </h3>
                                 </div>
                                 <div class="overflow-auto flex-1 bg-white/40 custom-scroll">
-                                    <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-2">
+                                    <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-1">
                                         <thead class="text-[10px] text-slate-500 font-bold uppercase bg-slate-50/90 sticky top-0 z-10 backdrop-blur-sm shadow-sm">
                                             <tr>
-                                                <th class="px-6 py-4 first:rounded-l-xl">Coordinator</th>
-                                                <th class="px-6 py-4 text-center">AWB</th>
-                                                <th class="px-6 py-4 text-right last:rounded-r-xl min-w-[120px] whitespace-nowrap">Total Amount</th>
+                                                <th class="px-4 py-3 first:rounded-l-xl">Coordinator</th>
+                                                <th class="px-3 py-3 text-center">AWB</th>
+                                                <th class="px-4 py-3 text-right last:rounded-r-xl whitespace-nowrap">Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody id="coordTableBody" class="divide-y divide-transparent">
@@ -422,12 +422,12 @@
                                     </h3>
                                 </div>
                                 <div class="overflow-auto flex-1 bg-white/40 custom-scroll">
-                                    <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-2">
+                                    <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-1">
                                         <thead class="text-[10px] text-slate-500 font-bold uppercase bg-slate-50/90 sticky top-0 z-10 backdrop-blur-sm shadow-sm">
                                             <tr>
-                                                <th class="px-6 py-4 first:rounded-l-xl">HUB Name</th>
-                                                <th class="px-6 py-4 text-center">AWB</th>
-                                                <th class="px-6 py-4 text-right last:rounded-r-xl min-w-[120px] whitespace-nowrap">Amount</th>
+                                                <th class="px-4 py-3 first:rounded-l-xl">HUB Name</th>
+                                                <th class="px-3 py-3 text-center">AWB</th>
+                                                <th class="px-4 py-3 text-right last:rounded-r-xl whitespace-nowrap">Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody id="hubTableBody" class="divide-y divide-transparent">
@@ -439,7 +439,7 @@
                         </div>
 
                         <!-- Pending Satria Monitor (Summary) -->
-                        <div class="glass-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[750px] lg:col-span-2 border-l-4 border-l-orange-400">
+                        <div class="glass-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[750px] lg:col-span-1 border-l-4 border-l-orange-400">
                             <div class="p-6 border-b border-slate-100 bg-orange-50/30 flex justify-between items-center">
                                 <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
                                     <span class="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center"><i class="fa-solid fa-users"></i></span>
@@ -447,13 +447,13 @@
                                 </h3>
                             </div>
                             <div class="overflow-auto flex-1 bg-white/40 custom-scroll">
-                                <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-2">
-                                    <thead class="text-[10px] text-slate-500 font-bold uppercase bg-slate-50/90 sticky top-0 z-10 backdrop-blur-sm shadow-sm">
+                                <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-1">
+                                    <thead class="text-[9px] text-slate-500 font-bold uppercase bg-slate-50/90 sticky top-0 z-10 backdrop-blur-sm shadow-sm">
                                         <tr>
-                                            <th class="px-6 py-4 first:rounded-l-xl min-w-[140px]">Satria</th>
-                                            <th class="px-6 py-4 text-right min-w-[100px] whitespace-nowrap">Cash In</th>
-                                            <th class="px-6 py-4 text-right min-w-[100px] whitespace-nowrap">Pending</th>
-                                            <th class="px-6 py-4 text-right last:rounded-r-xl min-w-[120px] whitespace-nowrap">Total</th>
+                                            <th class="px-3 py-3 first:rounded-l-xl">Satria</th>
+                                            <th class="px-2 py-3 text-right whitespace-nowrap">Cash In</th>
+                                            <th class="px-2 py-3 text-right whitespace-nowrap">Pending</th>
+                                            <th class="px-3 py-3 text-right last:rounded-r-xl whitespace-nowrap">Total</th>
                                         </tr>
                                     </thead>
                                     <tbody id="pendingSatriaTableBody" class="divide-y divide-transparent">
@@ -463,8 +463,8 @@
                             </div>
                         </div>
 
-                        <!-- Pending AWB Monitor (Details) - Dibuat full width (lg:col-span-3) -->
-                        <div class="glass-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[750px] lg:col-span-3 border-l-4 border-l-red-500">
+                        <!-- Pending AWB Monitor (Details) - Dibuat 2 Kolom (lg:col-span-2) -->
+                        <div class="glass-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[750px] lg:col-span-2 border-l-4 border-l-red-500">
                             <div class="p-6 border-b border-slate-100 bg-red-50/30 flex justify-between items-center">
                                 <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
                                     <span class="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center animate-pulse-slow"><i class="fa-solid fa-triangle-exclamation"></i></span>
@@ -481,10 +481,10 @@
                                 <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-2">
                                     <thead class="text-[10px] text-slate-500 font-bold uppercase bg-slate-50/90 sticky top-0 z-10 backdrop-blur-sm shadow-sm">
                                         <tr>
-                                            <th class="px-6 py-4 first:rounded-l-xl min-w-[140px]">AWB & Satria</th>
-                                            <th class="px-6 py-4 text-right min-w-[120px] whitespace-nowrap">Amount</th>
-                                            <th class="px-6 py-4 w-full min-w-[150px]">Note</th>
-                                            <th class="px-4 py-4 text-center w-10 last:rounded-r-xl">Act</th>
+                                            <th class="px-4 py-3 first:rounded-l-xl">AWB & Satria</th>
+                                            <th class="px-4 py-3 text-right whitespace-nowrap">Amount</th>
+                                            <th class="px-4 py-3 w-full">Note</th>
+                                            <th class="px-4 py-3 text-center w-10 last:rounded-r-xl">Act</th>
                                         </tr>
                                     </thead>
                                     <tbody id="pendingAwbTableBody" class="divide-y divide-transparent">
@@ -1218,14 +1218,14 @@
             const hAgg={}; displayTransactions.forEach(i=>{ const h=i.hub||'-'; if(!hAgg[h]) hAgg[h]={cnt:0,amt:0}; hAgg[h].cnt++; hAgg[h].amt+=i.amount; });
             const hSort = Object.entries(hAgg).sort((a,b)=>b[1].amt - a[1].amt).slice(0, 7); // Dibatasi maksimal 7 baris
             if(els.hubTableBody) {
-                els.hubTableBody.innerHTML = hSort.map(([h,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-bold text-xs text-slate-700">${h}</td><td class="px-6 py-4 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-6 py-4 text-right text-xs font-black text-emerald-600 min-w-[120px] whitespace-nowrap">${formatSmartIDR(d.amt)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
+                els.hubTableBody.innerHTML = hSort.map(([h,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-4 py-3 font-bold text-[11px] text-slate-700 whitespace-normal break-words">${h}</td><td class="px-3 py-3 text-center text-[11px] font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-4 py-3 text-right text-[11px] font-black text-emerald-600 whitespace-nowrap">${formatSmartIDR(d.amt)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
             }
 
             // 3. Coordinator Table (NEW)
             const coAgg={}; displayTransactions.forEach(i=>{ const c=i.coordinator||'Unassigned'; if(!coAgg[c]) coAgg[c]={cnt:0,amt:0}; coAgg[c].cnt++; coAgg[c].amt+=i.amount; });
             const coSort = Object.entries(coAgg).sort((a,b)=>b[1].amt - a[1].amt).slice(0, 3);
             if(els.coordTableBody) {
-                els.coordTableBody.innerHTML = coSort.map(([c,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-6 py-4 font-bold text-xs text-slate-700 truncate max-w-[120px]">${c}</td><td class="px-6 py-4 text-center text-xs font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-6 py-4 text-right text-xs font-black text-violet-600 min-w-[120px] whitespace-nowrap">${formatSmartIDR(d.amt)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
+                els.coordTableBody.innerHTML = coSort.map(([c,d]) => `<tr class="hover:bg-white/60 border-b border-slate-50 last:border-0"><td class="px-4 py-3 font-bold text-[11px] text-slate-700 whitespace-normal break-words">${c}</td><td class="px-3 py-3 text-center text-[11px] font-bold text-slate-500 bg-slate-50 rounded-lg">${d.cnt}</td><td class="px-4 py-3 text-right text-[11px] font-black text-violet-600 whitespace-nowrap">${formatSmartIDR(d.amt)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-center py-8 text-slate-400 text-xs">No Data</td></tr>';
             }
 
             // 4. Pending Satria Table (Summary) - UPDATED 3 COLUMNS
@@ -1241,18 +1241,18 @@
             if(els.pendingSatriaTableBody) {
                 els.pendingSatriaTableBody.innerHTML = pSort.map(([n,d]) => {
                     return `<tr class="hover:bg-orange-50/30 border-b border-slate-50 last:border-0">
-                        <td class="px-6 py-4 align-top truncate max-w-[180px]">
-                            <div class="font-bold text-xs text-slate-700 truncate">${n}</div>
+                        <td class="px-3 py-3 align-top whitespace-normal break-words">
+                            <div class="font-bold text-[11px] text-slate-700 leading-tight">${n}</div>
                             <div class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-building text-[8px]"></i> ${d.hub || '-'}</div>
                         </td>
-                        <td class="px-6 py-4 text-right align-top min-w-[100px] whitespace-nowrap">
-                            <div class="text-xs font-bold text-blue-500">${formatSmartIDR(d.amtSatria)}</div>
+                        <td class="px-2 py-3 text-right align-top whitespace-nowrap">
+                            <div class="text-[10px] font-bold text-blue-500">${formatSmartIDR(d.amtSatria)}</div>
                         </td>
-                        <td class="px-6 py-4 text-right align-top min-w-[100px] whitespace-nowrap">
-                            <div class="text-xs font-bold text-orange-500">${formatSmartIDR(d.amtPending)}</div>
+                        <td class="px-2 py-3 text-right align-top whitespace-nowrap">
+                            <div class="text-[10px] font-bold text-orange-500">${formatSmartIDR(d.amtPending)}</div>
                         </td>
-                        <td class="px-6 py-4 text-right align-top min-w-[120px] whitespace-nowrap">
-                            <div class="text-xs font-black text-slate-800">${formatSmartIDR(d.amtTotal)}</div>
+                        <td class="px-3 py-3 text-right align-top whitespace-nowrap">
+                            <div class="text-[11px] font-black text-slate-800">${formatSmartIDR(d.amtTotal)}</div>
                         </td>
                     </tr>`;
                 }).join('') || '<tr><td colspan="4" class="text-center py-8 text-emerald-500 text-xs font-bold"><i class="fa-solid fa-check-circle mr-2"></i>All Clean!</td></tr>';
@@ -1279,7 +1279,7 @@
                         const groupTotal = groupedAwb[stg].reduce((sum, item) => sum + item.amount, 0);
                         htmlContent += `
                             <tr class="bg-red-50/80 border-y border-red-100/50">
-                                <td colspan="4" class="px-6 py-3">
+                                <td colspan="4" class="px-4 py-2">
                                     <div class="flex items-center justify-between">
                                         <span class="text-[11px] font-black text-red-700 uppercase tracking-wider"><i class="fa-solid fa-layer-group mr-1.5 opacity-70"></i> STAGING: ${stg}</span>
                                         <span class="text-[11px] font-bold text-red-600 bg-white/60 px-2 py-1 rounded-md shadow-sm">${groupedAwb[stg].length} Resi | ${formatSmartIDR(groupTotal)}</span>
@@ -1292,23 +1292,23 @@
                         const items = groupedAwb[stg].sort((a,b) => b.amount - a.amount);
                         
                         items.forEach(i => {
-                            const badge = i.category==='satria' ? '<span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[9px] font-bold border border-blue-100 inline-block">CASH IN</span>' : '<span class="bg-orange-50 text-orange-600 px-2 py-0.5 rounded text-[9px] font-bold border border-orange-100 inline-block">PENDING</span>';
+                            const badge = i.category==='satria' ? '<span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[9px] font-bold border border-blue-100 inline-block mt-1">CASH IN</span>' : '<span class="bg-orange-50 text-orange-600 px-2 py-0.5 rounded text-[9px] font-bold border border-orange-100 inline-block mt-1">PENDING</span>';
                             const sanitizedId = i.awb.replace(/\//g, '_');
                             const note = awbNotesMap[sanitizedId] || '';
-                            const displayNote = note ? `<span class="text-xs text-slate-600 italic bg-yellow-50 px-2.5 py-1.5 rounded-lg border border-yellow-100 w-full block whitespace-normal break-words leading-relaxed shadow-sm" title="${note}">${note}</span>` : '<span class="text-[10px] text-slate-300">-</span>';
+                            const displayNote = note ? `<span class="text-[11px] text-slate-600 italic bg-yellow-50 px-2 py-1.5 rounded-lg border border-yellow-100 w-full block whitespace-normal break-words leading-relaxed shadow-sm" title="${note}">${note}</span>` : '<span class="text-[10px] text-slate-300">-</span>';
                             const editBtn = isAdmin ? `<button onclick="window.openNoteModal('${i.awb}')" class="bg-slate-100 hover:bg-indigo-100 text-slate-400 hover:text-indigo-600 p-1.5 rounded-lg transition-all border border-slate-200 shadow-sm" title="Edit Note"><i class="fa-solid fa-pen-to-square text-[10px]"></i></button>` : '';
 
                             htmlContent += `<tr class="hover:bg-red-50/30 border-b border-slate-50 last:border-0">
-                                <td class="px-6 py-4 align-top truncate max-w-[200px]">
-                                    <div class="font-bold text-xs text-slate-700 font-mono">${i.awb}</div>
-                                    <div class="text-[9px] font-bold text-slate-500 mt-1 truncate uppercase">${i.name}</div>
+                                <td class="px-4 py-3 align-top whitespace-normal break-words">
+                                    <div class="font-bold text-[11px] text-slate-700 font-mono">${i.awb}</div>
+                                    <div class="text-[9px] font-bold text-slate-500 mt-0.5 uppercase leading-tight">${i.name}</div>
                                 </td>
-                                <td class="px-6 py-4 text-right align-top min-w-[140px] whitespace-nowrap">
-                                    <div class="text-xs font-black text-red-500 mb-1.5 mt-0.5">${formatSmartIDR(i.amount)}</div>
+                                <td class="px-4 py-3 text-right align-top whitespace-nowrap">
+                                    <div class="text-[11px] font-black text-red-500">${formatSmartIDR(i.amount)}</div>
                                     <div class="flex justify-end">${badge}</div>
                                 </td>
-                                <td class="px-6 py-4 w-full min-w-[150px] align-top">${displayNote}</td>
-                                <td class="px-4 py-4 text-center w-10 align-top pt-5">${editBtn}</td>
+                                <td class="px-4 py-3 w-full align-top">${displayNote}</td>
+                                <td class="px-4 py-3 text-center w-10 align-top pt-4">${editBtn}</td>
                             </tr>`;
                         });
                     });
