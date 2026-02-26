@@ -1015,35 +1015,7 @@
 
         function updateCharts(t) {
             // Trend
-            const ctxT = document.getElementById('trendChart').getContext('2d'); if(trendChart) trendChart.destroy();
-            const aggregated={}; displayTransactions.forEach(i => { const k = currentTrendMode==='daily'?i.date:i.date.substring(0,7); aggregated[k]=(aggregated[k]||0)+i.amount; });
-            const keys = Object.keys(aggregated).sort();
-            const grad = ctxT.createLinearGradient(0,0,0,300); grad.addColorStop(0,'rgba(99,102,241,0.4)'); grad.addColorStop(1,'rgba(99,102,241,0)');
-            trendChart = new Chart(ctxT, {
-                type: 'line', plugins: [ChartDataLabels],
-                data: { labels: keys.map(k=>currentTrendMode==='daily'?k.split('-').slice(1).reverse().join('/'):new Date(k+'-01').toLocaleDateString('en',{month:'short',year:'2-digit'})), datasets: [{ data: keys.map(k=>aggregated[k]), borderColor: '#6366f1', backgroundColor: grad, fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6 }] },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    layout: { padding: { top: 25 } },
-                    plugins: { 
-                        legend: {display: false}, 
-                        datalabels: { 
-                            display: true,
-                            align: 'top',
-                            anchor: 'end',
-                            formatter: (val) => formatSmartIDR(val),
-                            font: { size: 9, weight: 'bold' },
-                            color: '#4b5563',
-                            offset: 4,
-                            backgroundColor: 'rgba(255,255,255,0.8)',
-                            borderRadius: 4
-                        },
-                        tooltip: { mode: 'index', intersect: false, callbacks: { label: c => formatSmartIDR(c.raw) } } 
-                    }, 
-                    scales: { x: { grid: {display: false} }, y: { display: false } } 
-                }
-            });
+            updateTrendChart(displayTransactions);
 
             // Donut
             const ctxD = document.getElementById('donutChart').getContext('2d'); if(donutChart) donutChart.destroy();
@@ -1128,7 +1100,9 @@
             const ctx = document.getElementById('trendChart').getContext('2d');
             if (trendChart) trendChart.destroy();
 
-            const aggregated = {};
+            const aggTotal = {};
+            const aggPending = {};
+            
             data.forEach(item => {
                 let key;
                 if (currentTrendMode === 'daily') {
@@ -1136,12 +1110,23 @@
                 } else {
                     key = item.date.substring(0, 7); 
                 }
-                if (!aggregated[key]) aggregated[key] = 0;
-                aggregated[key] += item.amount;
+                
+                if (!aggTotal[key]) {
+                    aggTotal[key] = 0;
+                    aggPending[key] = 0;
+                }
+                
+                aggTotal[key] += item.amount;
+                
+                // Pending is anything that is not yet transferred
+                if (item.category === 'pending' || item.category === 'satria') {
+                    aggPending[key] += item.amount;
+                }
             });
 
-            const keys = Object.keys(aggregated).sort();
-            const values = keys.map(k => aggregated[k]);
+            const keys = Object.keys(aggTotal).sort();
+            const valsTotal = keys.map(k => aggTotal[k]);
+            const valsPending = keys.map(k => aggPending[k]);
             
             const labels = keys.map(k => {
                 if(currentTrendMode === 'daily') {
@@ -1153,38 +1138,57 @@
                 }
             });
 
-            const grad = ctx.createLinearGradient(0,0,0,300); 
-            grad.addColorStop(0,'rgba(99,102,241,0.4)'); 
-            grad.addColorStop(1,'rgba(99,102,241,0)');
+            // Blue Gradient for Total
+            const gradTotal = ctx.createLinearGradient(0,0,0,300); 
+            gradTotal.addColorStop(0,'rgba(99,102,241,0.4)'); 
+            gradTotal.addColorStop(1,'rgba(99,102,241,0)');
+
+            // Orange Gradient for Pending
+            const gradPending = ctx.createLinearGradient(0,0,0,300); 
+            gradPending.addColorStop(0,'rgba(249,115,22,0.4)'); 
+            gradPending.addColorStop(1,'rgba(249,115,22,0)');
 
             trendChart = new Chart(ctx, {
                 type: 'line', 
                 plugins: [ChartDataLabels],
                 data: { 
                     labels: labels, 
-                    datasets: [{ 
-                        data: values, 
-                        borderColor: '#6366f1', 
-                        backgroundColor: grad, 
-                        fill: true, 
-                        tension: 0.4, 
-                        pointRadius: 4, 
-                        pointHoverRadius: 6 
-                    }] 
+                    datasets: [
+                        { 
+                            label: 'Total Revenue',
+                            data: valsTotal, 
+                            borderColor: '#6366f1', 
+                            backgroundColor: gradTotal, 
+                            fill: true, 
+                            tension: 0.4, 
+                            pointRadius: 4, 
+                            pointHoverRadius: 6 
+                        },
+                        { 
+                            label: 'Pending & Cash In',
+                            data: valsPending, 
+                            borderColor: '#f97316', 
+                            backgroundColor: gradPending, 
+                            fill: true, 
+                            tension: 0.4, 
+                            pointRadius: 4, 
+                            pointHoverRadius: 6 
+                        }
+                    ] 
                 },
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false, 
                     layout: { padding: { top: 35, left: 10, right: 10 } },
                     plugins: { 
-                        legend: {display: false}, 
+                        legend: { display: false }, 
                         datalabels: { 
                             display: true,
-                            align: 'top',
-                            anchor: 'end',
-                            formatter: (val) => formatSmartIDR(val),
-                            font: { size: 10, weight: 'bold', family: "'Plus Jakarta Sans', sans-serif" }, 
-                            color: '#4b5563',
+                            align: (context) => context.datasetIndex === 0 ? 'top' : 'bottom', // Total on top, Pending on bottom
+                            anchor: (context) => context.datasetIndex === 0 ? 'end' : 'start',
+                            formatter: (val) => val > 0 ? formatSmartIDR(val) : '', // Hide if zero
+                            font: { size: 9, weight: 'bold', family: "'Plus Jakarta Sans', sans-serif" }, 
+                            color: (context) => context.datasetIndex === 0 ? '#4b5563' : '#ea580c',
                             offset: 4,
                             backgroundColor: 'rgba(255,255,255,0.8)',
                             borderRadius: 4
@@ -1192,7 +1196,7 @@
                         tooltip: { 
                             mode: 'index', 
                             intersect: false, 
-                            callbacks: { label: c => formatSmartIDR(c.raw) } 
+                            callbacks: { label: c => `${c.dataset.label}: ${formatSmartIDR(c.raw)}` } 
                         } 
                     }, 
                     scales: { 
