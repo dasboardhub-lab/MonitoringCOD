@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COD Dashboard</title>
+    <title>COD Dashboard - Executive Summary</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -708,8 +708,8 @@
 
         let currentUser = null, isAdmin = false, rawTransactions = [], displayTransactions = [], allUploads = [], donutChart = null, stagingChart = null, trendChart = null, currentTrendMode = 'daily', deleteTargetId = null, currentPage = 1, selectedStagings = new Set(['ALL']), selectedCoordinators = new Set(['ALL']);
         let coordinatorsMap = {};
-        let awbNotesMap = {}; // State untuk menyimpan catatan per AWB
-        let currentEditingAwb = null; // State untuk modal edit note 
+        let dailyNotesMap = {}; // State untuk menyimpan catatan per Kurir per Hari
+        let currentEditingNoteId = null; // State untuk modal edit note
         const itemsPerPage = 100;
 
         const els = { 
@@ -894,37 +894,33 @@
             });
         }
 
-        // --- NOTE LOGIC (NEW: Per AWB) ---
+        // --- NOTE LOGIC (NEW: Per Kurir per Tanggal) ---
         function loadNotes() {
             if(!currentUser) return;
-            // Gunakan koleksi terpisah untuk awb_notes
-            const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'awb_notes'));
+            const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'daily_courier_notes'));
             onSnapshot(q, (snap) => {
-                awbNotesMap = {};
-                snap.forEach(d => { awbNotesMap[d.id] = d.data().note; });
-                if(displayTransactions.length > 0) renderTables(); // Refresh table only if data exists
+                dailyNotesMap = {};
+                snap.forEach(d => { dailyNotesMap[d.id] = d.data().note; });
+                if(displayTransactions.length > 0) renderTables();
             });
         }
 
-        window.openNoteModal = (awb) => {
-            currentEditingAwb = awb;
-            document.getElementById('noteModalName').innerText = `AWB: ${awb}`;
-            
-            const sanitizedId = awb.replace(/\//g, '_');
-            document.getElementById('noteInput').value = awbNotesMap[sanitizedId] || '';
+        window.openNoteModal = (date, courierName) => {
+            currentEditingNoteId = `${date}_${courierName}`.replace(/[\/\s]/g, '_');
+            document.getElementById('noteModalName').innerText = `Satria: ${courierName} (${date})`;
+            document.getElementById('noteInput').value = dailyNotesMap[currentEditingNoteId] || '';
             els.noteModal.classList.remove('hidden');
         };
 
         window.saveNote = async () => {
-            if(!currentEditingAwb) return;
+            if(!currentEditingNoteId) return;
             const note = document.getElementById('noteInput').value;
-            const sanitizedId = currentEditingAwb.replace(/\//g, '_');
             
             els.noteModal.classList.add('hidden');
             setIsland('loading', 'Saving Note...');
             
             try {
-                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'awb_notes', sanitizedId), { 
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'daily_courier_notes', currentEditingNoteId), { 
                     note: note, 
                     updatedAt: new Date(),
                     updatedBy: 'Admin'
@@ -1301,58 +1297,92 @@
                 els.pendingSatriaTableBody.innerHTML = htmlSatria;
             }
 
-            // 4.5 Pending AWB Table (Details with Notes) - UPDATED GROUPING BY STAGING
+            // 4.5 Pending AWB Table (Details with Notes per Courier per Date)
             if(els.pendingAwbTableBody) {
-                // Kelompokkan data berdasarkan Staging
-                const groupedAwb = {};
+                // Kelompokkan data berdasarkan Tanggal -> Staging -> Kurir
+                const groupedDate = {};
                 pendingData.forEach(i => {
+                    const d = i.date;
                     const stg = i.staging || 'Unassigned';
-                    if(!groupedAwb[stg]) groupedAwb[stg] = [];
-                    groupedAwb[stg].push(i);
+                    const c = i.name || 'Unknown';
+                    if(!groupedDate[d]) groupedDate[d] = {};
+                    if(!groupedDate[d][stg]) groupedDate[d][stg] = {};
+                    if(!groupedDate[d][stg][c]) groupedDate[d][stg][c] = [];
+                    groupedDate[d][stg][c].push(i);
                 });
 
-                const sortedStagings = Object.keys(groupedAwb).sort();
+                const sortedDates = Object.keys(groupedDate).sort((a,b)=>b.localeCompare(a)); // Terbaru di atas
                 let htmlContent = '';
 
-                if (sortedStagings.length === 0) {
+                if (sortedDates.length === 0) {
                     htmlContent = '<tr><td colspan="4" class="text-center py-8 text-emerald-500 text-xs font-bold"><i class="fa-solid fa-check-circle mr-2"></i>All Clean!</td></tr>';
                 } else {
-                    sortedStagings.forEach(stg => {
-                        // Render Group Header
-                        const groupTotal = groupedAwb[stg].reduce((sum, item) => sum + item.amount, 0);
+                    sortedDates.forEach(date => {
+                        // Date Header
                         htmlContent += `
-                            <tr class="bg-red-50/80 border-y border-red-100/50">
+                            <tr class="bg-indigo-50/80 border-y border-indigo-100/50">
                                 <td colspan="4" class="px-4 py-2">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-[11px] font-black text-red-700 uppercase tracking-wider"><i class="fa-solid fa-layer-group mr-1.5 opacity-70"></i> STAGING: ${stg}</span>
-                                        <span class="text-[11px] font-bold text-red-600 bg-white/60 px-2 py-1 rounded-md shadow-sm">${groupedAwb[stg].length} Resi | ${formatSmartIDR(groupTotal)}</span>
-                                    </div>
+                                    <span class="text-[11px] font-black text-indigo-700 uppercase tracking-wider"><i class="fa-regular fa-calendar mr-1.5 opacity-70"></i> TANGGAL: ${date}</span>
                                 </td>
                             </tr>
                         `;
-
-                        // Render Items in this Group (Sorted by Amount)
-                        const items = groupedAwb[stg].sort((a,b) => b.amount - a.amount);
                         
-                        items.forEach(i => {
-                            const badge = i.category==='satria' ? '<span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[9px] font-bold border border-blue-100 inline-block mt-1">CASH IN</span>' : '<span class="bg-orange-50 text-orange-600 px-2 py-0.5 rounded text-[9px] font-bold border border-orange-100 inline-block mt-1">PENDING</span>';
-                            const sanitizedId = i.awb.replace(/\//g, '_');
-                            const note = awbNotesMap[sanitizedId] || '';
-                            const displayNote = note ? `<span class="text-[11px] text-slate-600 italic bg-yellow-50 px-2 py-1.5 rounded-lg border border-yellow-100 w-full block whitespace-normal break-words leading-relaxed shadow-sm" title="${note}">${note}</span>` : '<span class="text-[10px] text-slate-300">-</span>';
-                            const editBtn = isAdmin ? `<button onclick="window.openNoteModal('${i.awb}')" class="bg-slate-100 hover:bg-indigo-100 text-slate-400 hover:text-indigo-600 p-1.5 rounded-lg transition-all border border-slate-200 shadow-sm" title="Edit Note"><i class="fa-solid fa-pen-to-square text-[10px]"></i></button>` : '';
+                        const stagings = groupedDate[date];
+                        const sortedStagings = Object.keys(stagings).sort();
+                        
+                        sortedStagings.forEach(stg => {
+                            // Staging Header
+                            htmlContent += `
+                                <tr class="bg-red-50/60 border-y border-red-100/30">
+                                    <td colspan="4" class="px-4 py-1.5 pl-8">
+                                        <span class="text-[10px] font-bold text-red-600 uppercase tracking-wider"><i class="fa-solid fa-layer-group mr-1.5 opacity-70"></i> STAGING: ${stg}</span>
+                                    </td>
+                                </tr>
+                            `;
+                            
+                            const couriers = stagings[stg];
+                            // Sort couriers by total amount in this staging
+                            const sortedCouriers = Object.keys(couriers).map(c => {
+                                const items = couriers[c];
+                                const total = items.reduce((sum, i) => sum + i.amount, 0);
+                                return { name: c, items, total };
+                            }).sort((a,b) => b.total - a.total);
+                            
+                            sortedCouriers.forEach(courier => {
+                                const noteId = `${date}_${courier.name}`.replace(/[\/\s]/g, '_');
+                                const note = dailyNotesMap[noteId] || '';
+                                const displayNote = note ? `<span class="text-[11px] text-slate-600 italic bg-yellow-50 px-2 py-1.5 rounded-lg border border-yellow-100 w-full block whitespace-normal break-words leading-relaxed shadow-sm" title="${note}">${note}</span>` : '<span class="text-[10px] text-slate-300">-</span>';
+                                const editBtn = isAdmin ? `<button onclick="window.openNoteModal('${date}', '${courier.name.replace(/'/g, "\\'")}')" class="bg-slate-100 hover:bg-indigo-100 text-slate-400 hover:text-indigo-600 p-1.5 rounded-lg transition-all border border-slate-200 shadow-sm" title="Edit Note"><i class="fa-solid fa-pen-to-square text-[10px]"></i></button>` : '';
 
-                            htmlContent += `<tr class="hover:bg-red-50/30 border-b border-slate-50 last:border-0">
-                                <td class="px-4 py-3 align-top whitespace-normal break-words">
-                                    <div class="font-bold text-[11px] text-slate-700 font-mono">${i.awb}</div>
-                                    <div class="text-[9px] font-bold text-slate-500 mt-0.5 uppercase leading-tight">${i.name}</div>
-                                </td>
-                                <td class="px-4 py-3 text-right align-top whitespace-nowrap min-w-[100px]">
-                                    <div class="text-[11px] font-black text-red-500">${formatSmartIDR(i.amount)}</div>
-                                    <div class="flex justify-end">${badge}</div>
-                                </td>
-                                <td class="px-4 py-3 w-full align-top">${displayNote}</td>
-                                <td class="px-4 py-3 text-center w-10 align-top pt-4">${editBtn}</td>
-                            </tr>`;
+                                // Courier Row (With Note & Edit Action)
+                                htmlContent += `
+                                <tr class="bg-white hover:bg-slate-50 border-b border-slate-50 last:border-0 shadow-sm">
+                                    <td class="px-4 py-3 align-top whitespace-normal break-words pl-8">
+                                        <div class="font-bold text-[11px] text-slate-800 flex items-center gap-2"><i class="fa-solid fa-user-ninja text-slate-400"></i> ${courier.name}</div>
+                                        <div class="text-[9px] text-slate-500 mt-1">${courier.items.length} Resi</div>
+                                    </td>
+                                    <td class="px-4 py-3 text-right align-top whitespace-nowrap min-w-[100px]">
+                                        <div class="text-[11px] font-black text-slate-700">${formatSmartIDR(courier.total)}</div>
+                                    </td>
+                                    <td class="px-4 py-3 w-full align-top">${displayNote}</td>
+                                    <td class="px-4 py-3 text-center w-10 align-top">${editBtn}</td>
+                                </tr>`;
+                                
+                                // AWB Rows Breakdown (Indented, without note/action)
+                                courier.items.sort((a,b) => b.amount - a.amount).forEach(i => {
+                                    const badge = i.category==='satria' ? '<span class="text-blue-500 font-bold">CASH IN</span>' : '<span class="text-orange-500 font-bold">PENDING</span>';
+                                    htmlContent += `
+                                    <tr class="hover:bg-slate-50 border-b border-slate-50/50 last:border-0">
+                                        <td class="px-4 py-1.5 align-middle pl-12">
+                                            <div class="text-[10px] text-slate-600 font-mono flex items-center gap-2"><i class="fa-solid fa-level-up-alt rotate-90 text-slate-300"></i> ${i.awb}</div>
+                                        </td>
+                                        <td class="px-4 py-1.5 text-right align-middle whitespace-nowrap">
+                                            <div class="text-[10px] font-bold text-slate-500">${formatSmartIDR(i.amount)}</div>
+                                        </td>
+                                        <td class="px-4 py-1.5 align-middle text-[9px]" colspan="2">${badge}</td>
+                                    </tr>`;
+                                });
+                            });
                         });
                     });
                 }
@@ -1415,33 +1445,26 @@
                 return;
             }
 
-            // SORTING: SS -> NIK -> Status -> Resi
+            // SORTING: Date -> SS -> Courier -> Resi
             pendingList.sort((a, b) => {
-                const sA = a.staging || '';
-                const sB = b.staging || '';
+                if (a.date !== b.date) return b.date.localeCompare(a.date);
+                const sA = a.staging || ''; const sB = b.staging || '';
                 if (sA !== sB) return sA.localeCompare(sB);
-
-                const nA = a.nik || '';
-                const nB = b.nik || '';
+                const nA = a.name || ''; const nB = b.name || '';
                 if (nA !== nB) return nA.localeCompare(nB);
-
-                const cA = a.category || '';
-                const cB = b.category || '';
-                if (cA !== cB) return cA.localeCompare(cB);
-
                 return (a.awb || '').localeCompare(b.awb || '');
             });
 
-            // Format: Kode SS | NIK | Status | Resi | Note
+            // Format: Tanggal | Kode SS | Kurir | NIK | Status | Resi | Note
             const textToCopy = pendingList.map(item => {
                 const status = item.category === 'satria' ? 'CASH IN SATRIA' : 'PENDING';
                 const nik = item.nik || '-';
                 
-                // Fetch note per AWB (now mapped to AWB directly)
-                const sanitizedId = item.awb ? item.awb.replace(/\//g, '_') : '';
-                const note = awbNotesMap[sanitizedId] || '-';
+                // Fetch note per Courier
+                const noteId = `${item.date}_${item.name}`.replace(/[\/\s]/g, '_');
+                const note = dailyNotesMap[noteId] || '-';
 
-                return `${item.staging} | ${nik} | ${status} | ${item.awb} | ${note}`;
+                return `${item.date} | ${item.staging} | ${item.name} | ${nik} | ${status} | ${item.awb} | ${note}`;
             }).join('\n');
 
             try {
