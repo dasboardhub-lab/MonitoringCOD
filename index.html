@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COD Dashboard</title>
+    <title>COD Dashboard - Executive Summary</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -477,13 +477,14 @@
                                 </div>
                             </div>
                             <div class="overflow-auto flex-1 bg-white/40 custom-scroll">
-                                <table class="w-full text-sm text-left relative border-separate border-spacing-y-1 px-2">
+                                <!-- Ditambahkan table-fixed untuk mengunci persentase lebar -->
+                                <table class="w-full table-fixed text-sm text-left relative border-separate border-spacing-y-1 px-2">
                                     <thead class="text-[10px] text-slate-500 font-bold uppercase bg-slate-50/90 sticky top-0 z-10 backdrop-blur-sm shadow-sm">
                                         <tr>
-                                            <th class="px-4 py-3 first:rounded-l-xl">AWB & Satria</th>
-                                            <th class="px-4 py-3 text-right whitespace-nowrap min-w-[100px]">Amount</th>
-                                            <th class="px-4 py-3 max-w-[120px]">Note</th>
-                                            <th class="px-4 py-3 text-center w-10 last:rounded-r-xl">Act</th>
+                                            <th class="px-4 py-3 first:rounded-l-xl w-[25%]">AWB & Satria</th>
+                                            <th class="px-4 py-3 text-right w-[30%]">Amount</th>
+                                            <th class="px-4 py-3 w-[40%]">Note</th>
+                                            <th class="px-2 py-3 text-center w-[5%] last:rounded-r-xl">Act</th>
                                         </tr>
                                     </thead>
                                     <tbody id="pendingAwbTableBody" class="divide-y divide-transparent">
@@ -1363,11 +1364,11 @@
                                         <div class="font-bold text-[11px] text-slate-800 flex items-center gap-2"><i class="fa-solid fa-user-ninja text-slate-400"></i> ${courier.name}</div>
                                         <div class="text-[9px] text-slate-500 mt-1">${courier.items.length} Resi</div>
                                     </td>
-                                    <td class="px-4 py-3 text-right align-top whitespace-nowrap min-w-[100px]">
+                                    <td class="px-4 py-3 text-right align-top whitespace-nowrap">
                                         <div class="text-[11px] font-black text-slate-700">${formatSmartIDR(courier.total)}</div>
                                     </td>
-                                    <td class="px-4 py-3 max-w-[120px] align-top">${displayNote}</td>
-                                    <td class="px-4 py-3 text-center w-10 align-top">${editBtn}</td>
+                                    <td class="px-4 py-3 align-top">${displayNote}</td>
+                                    <td class="px-2 py-3 text-center align-top">${editBtn}</td>
                                 </tr>`;
                                 
                                 // AWB Rows Breakdown (Indented, without note/action)
@@ -1375,7 +1376,7 @@
                                     const badge = i.category==='satria' ? '<span class="text-blue-500 font-bold">CASH IN</span>' : '<span class="text-orange-500 font-bold">PENDING</span>';
                                     htmlContent += `
                                     <tr class="hover:bg-slate-50 border-b border-slate-50/50 last:border-0">
-                                        <td class="px-4 py-1.5 align-middle pl-12">
+                                        <td class="px-4 py-1.5 align-middle pl-12 whitespace-normal break-words">
                                             <div class="text-[10px] text-slate-600 font-mono flex items-center gap-2"><i class="fa-solid fa-level-up-alt rotate-90 text-slate-300"></i> ${i.awb}</div>
                                         </td>
                                         <td class="px-4 py-1.5 text-right align-middle whitespace-nowrap">
